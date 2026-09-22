@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hillcart"
+version = "0.1.0"
+description = "Voziček s palico v kotanji - simulator in RL eksperimenti (diplomska naloga)"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "matplotlib>=3.7", "tensorboardX>=2.6", "tensorboard>=2.14", "pillow>=10"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "sympy>=1.12"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
