@@ -1,5 +1,5 @@
 {
-  "version": "p2_control_v1",
+  "version": "p2_control_v2",
   "generated_by": {
     "script": "scripts/make_p2_config.py",
     "git": {
@@ -102,8 +102,8 @@
           0.2617993877991494
         ],
         "x_dot": [
-          -2.4985470625306525,
-          2.4985470625306525
+          -4.980670069044458,
+          4.980670069044458
         ],
         "theta_dot": [
           -3.885961283586061,
@@ -170,7 +170,51 @@
           }
         }
       },
-      "note": "stalni polni potisk je nemogoc, ker theta_eq >> 15 stopinj; F_max = 10 N je sidro na Barto, Sutton & Anderson (1983)"
+      "note": "stalni polni potisk je nemogoc, ker theta_eq >> 15 stopinj; F_max = 10 N je sidro na Barto, Sutton & Anderson (1983)",
+      "tile_bounds_previous": {
+        "x": [
+          -10.0,
+          10.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -2.4985470625306525,
+          2.4985470625306525
+        ],
+        "theta_dot": [
+          -3.885961283586061,
+          3.885961283586061
+        ],
+        "margin": 0.25
+      },
+      "recalibration": {
+        "script": "scripts/recalibrate_bounds.py",
+        "git": {
+          "commit": "85ecd52976a3c7eb7e95eae575e59e4c1004d46f",
+          "short": "85ecd529",
+          "branch": "main",
+          "dirty": false,
+          "describe": "baselines-v1-2-g85ecd52"
+        },
+        "runs": [
+          "20260926-141229_p2_P2ii_flat_balance_s100_85ecd529",
+          "20260926-141348_p2_P2ii_flat_balance_s101_85ecd529",
+          "20260926-141524_p2_P2ii_flat_balance_s102_85ecd529"
+        ],
+        "margin": 0.25,
+        "changed": {
+          "x_dot": {
+            "old": 2.4985470625306525,
+            "new": 4.980670069044458,
+            "observed_absmax": 3.9845360552355666
+          }
+        },
+        "episodes": 243,
+        "rule": "nova meja = max(stara, |opazovano pod pozresno politiko| * (1 + rezerva))"
+      }
     }
   },
   "agent": {
