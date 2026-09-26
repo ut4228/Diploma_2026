@@ -49,3 +49,24 @@ Odpri http://localhost:6006. Vse skalarne metrike so tudi v `runs/<zagon>/scalar
 | `scalars.csv`           | metrike (tag, step, value, wall_time)                                        |
 | `events.out.tfevents.*` | TensorBoard                                                                  |
 | `summary.json`          | povzetek                                                                     |
+
+## RL agent (faza P2)
+
+Tile coding + true online Sarsa(lambda). Fizike in `plan_v1.json` ta faza ne spreminja.
+
+| Modul                         | Vsebina                                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `src/hillcart/tile_coding.py` | 16 plositev x 9^4 plosic na akcijo (314 928 utezi), zamiki `((j*d) mod 16)/16`, clipping + stevec `oob` |
+| `src/hillcart/agent.py`       | true online Sarsa(lambda) (S&B 2018, razd. 12.7, str. 307), redke nizozemske sledi                      |
+| `src/hillcart/training.py`    | ucna zanka; vrednotenje je locENO (epsilon = 0, brez posodobitev)                                       |
+| `src/hillcart/env.py`         | dodani neobvezni `track`, `F_max`, `tile_bounds` (za kontrolno nalogo na ravnem tiru)                   |
+
+```powershell
+python scripts/make_p2_config.py     # -> configs/p2_control.json (meje za kontrolni nalogi)
+python scripts/run_p2.py --alpha0 0.5 --optimistic     # P2(i) in P2(ii), semena 100-102
+python scripts/recalibrate_bounds.py --task P2ii_flat_balance   # po potrebi razsiri meje
+```
+
+Kontrolni nalogi P2 NISTA rezultat diplome, ampak kontrola implementacije:
+`P2i_pump_no_pole` (ali se agent nauci doseci cilj) in `P2ii_flat_balance`
+(ali se nauci ohranjati ravnotezje in se premikati).

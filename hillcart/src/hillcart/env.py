@@ -1,23 +1,17 @@
 """RL okolje (sloj nad validiranim simulatorjem). Fizike ta modul NE spreminja.
 
-Pravila epizode (dogovorjeno):
-  SUCCESS   : |x| >= W in |theta| <= 15 stopinj     (cilj je dosegljiv na OBEH straneh)
+  SUCCESS   : |x| >= W in |theta| <= 15 stopinj  (cilj je dosegljiv na OBEH straneh)
   FAIL_POLE : |theta| > 15 stopinj
-  TIMEOUT   : t >= T_max  -> PREKINITEV (truncation), NI terminalno stanje
+  TIMEOUT   : PREKINITEV (truncation), NI terminalno stanje
 
-Simulator ima zgodovinsko oznako FAIL_LEFT za dosego levega roba. Ker je levi rob zdaj
-prav tako cilj, ta sloj izid preslika v SUCCESS in stran izhoda zapiše v info["exit_side"].
-Simulator ostaja nespremenjen (zahteva faze P0).
-
-Nagrada R-C:  +1 ob uspehu, -1 ob padcu palice, 0 sicer in ob prekinitvi.
+Nagrada R-C:  +1 uspeh, -1 padec palice, 0 sicer in ob prekinitvi.
 Okolje NE pozna gamma; diskontiranje je last agenta in metrik.
 """
 from __future__ import annotations
 
 import hashlib
 import json
-import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 
@@ -49,7 +43,7 @@ class EnvOutcome(str, Enum):
 _SIM_TO_ENV = {
     Outcome.RUNNING: EnvOutcome.RUNNING,
     Outcome.SUCCESS: EnvOutcome.SUCCESS,
-    Outcome.FAIL_LEFT: EnvOutcome.SUCCESS,  # levi rob je zdaj prav tako cilj
+    Outcome.FAIL_LEFT: EnvOutcome.SUCCESS,
     Outcome.FAIL_POLE: EnvOutcome.FAIL_POLE,
     Outcome.TIMEOUT: EnvOutcome.TIMEOUT,
 }
@@ -57,19 +51,17 @@ _SIM_TO_ENV = {
 
 @dataclass(frozen=True)
 class RewardRC:
-    """R-C: uspeh/neuspeh. Brez kazni na korak, brez oblikovanja."""
-
     success: float = 1.0
     failure: float = -1.0
     step: float = 0.0
-    potential: None = None  # oblikovanje (Phi) v P0 ni implementirano
+    potential: None = None
 
     def __call__(self, outcome: EnvOutcome) -> float:
         if outcome is EnvOutcome.SUCCESS:
             return self.success
         if outcome is EnvOutcome.FAIL_POLE:
             return self.failure
-        return self.step  # RUNNING in TIMEOUT
+        return self.step
 
     def describe(self) -> dict:
         return {"type": "R-C", "success": self.success, "failure": self.failure, "step": self.step,
@@ -78,8 +70,6 @@ class RewardRC:
 
 @dataclass(frozen=True)
 class ExperimentSpec:
-    """Ena konfiguracija iz configs/plan_v1.json."""
-
     config_id: str
     valley: PowerValley
     params: PoleCartParams
@@ -92,7 +82,7 @@ class ExperimentSpec:
     train_noise: tuple = TRAIN_NOISE
 
     @staticmethod
-    def from_plan(plan_path: str | Path, config_id: str) -> "ExperimentSpec":
+    def from_plan(plan_path, config_id: str) -> "ExperimentSpec":
         p = Path(plan_path)
         raw = p.read_bytes()
         plan = json.loads(raw.decode("utf-8"))
@@ -108,13 +98,9 @@ class ExperimentSpec:
             sim=SimConfig(dt=plan["sim"]["dt"], n_substeps=plan["sim"]["n_substeps"],
                           theta_max_deg=plan["sim"]["theta_max_deg"], t_max=plan["sim"]["t_max"],
                           integrator=plan["sim"]["integrator"]),
-            F_max=row["forces"]["F_max"],
-            forces=row["forces"],
-            tile_bounds=row["tile_bounds"],
-            plan_sha256=hashlib.sha256(raw).hexdigest(),
-            plan_version=plan["version"],
-            train_noise=tuple(plan["initial_states"]["train_noise_uniform"]),
-        )
+            F_max=row["forces"]["F_max"], forces=row["forces"], tile_bounds=row["tile_bounds"],
+            plan_sha256=hashlib.sha256(raw).hexdigest(), plan_version=plan["version"],
+            train_noise=tuple(plan["initial_states"]["train_noise_uniform"]))
 
     def describe(self) -> dict:
         return {"config_id": self.config_id, "plan_version": self.plan_version, "plan_sha256": self.plan_sha256,
@@ -128,17 +114,20 @@ class ExperimentSpec:
 class HillCartEnv:
     """Okolje z diskretnimi akcijami {0, 1, 2} -> {-F_max, 0, +F_max}."""
 
-    def __init__(self, spec: ExperimentSpec, reward: RewardRC = RewardRC(), check_pole: bool = True):
+    def __init__(self, spec, reward=RewardRC(), check_pole: bool = True, track=None, F_max=None,
+                 tile_bounds=None):
         self.spec = spec
         self.reward_fn = reward
         self.check_pole = check_pole
-        self.forces = (-spec.F_max, 0.0, +spec.F_max)
-        self._sim = HillCartSimulator(spec.valley, spec.F_max, spec.params, spec.sim, check_pole=check_pole)
+        self.track = track if track is not None else spec.valley
+        self.F_max = spec.F_max if F_max is None else float(F_max)
+        self.tile_bounds = spec.tile_bounds if tile_bounds is None else tile_bounds
+        self.forces = (-self.F_max, 0.0, +self.F_max)
+        self._sim = HillCartSimulator(self.track, self.F_max, spec.params, spec.sim, check_pole=check_pole)
         self.outcome = EnvOutcome.RUNNING
         self.obs = None
         self.oob_steps = 0
 
-    # ------------------------------------------------------------------ pomožno
     @property
     def steps(self) -> int:
         return self._sim.steps
@@ -152,12 +141,11 @@ class HillCartEnv:
         return self._sim.t_event
 
     def _oob(self, obs) -> dict:
-        b = self.spec.tile_bounds
+        b = self.tile_bounds
         return {"x_dot": not (b["x_dot"][0] <= obs[1] <= b["x_dot"][1]),
                 "theta_dot": not (b["theta_dot"][0] <= obs[3] <= b["theta_dot"][1])}
 
-    # ------------------------------------------------------------------ API
-    def reset(self, obs0=None, rng: np.random.Generator | None = None):
+    def reset(self, obs0=None, rng=None):
         if obs0 is None:
             if rng is None:
                 raise ValueError("podaj obs0 ali rng")
@@ -169,7 +157,7 @@ class HillCartEnv:
 
     def step(self, action: int):
         if self.outcome is not EnvOutcome.RUNNING:
-            raise RuntimeError("epizoda je končana; pokliči reset()")
+            raise RuntimeError("epizoda je koncana; poklici reset()")
         if not isinstance(action, (int, np.integer)) or not 0 <= int(action) < N_ACTIONS:
             raise ValueError(f"akcija mora biti 0, 1 ali 2, dobil {action!r}")
         F = self.forces[int(action)]
@@ -187,11 +175,11 @@ class HillCartEnv:
     def describe(self) -> dict:
         return {"spec": self.spec.describe(), "reward": self.reward_fn.describe(), "n_actions": N_ACTIONS,
                 "actions_N": list(self.forces), "check_pole": self.check_pole,
+                "track": self.track.describe(), "F_max": self.F_max, "tile_bounds": self.tile_bounds,
                 "outcome_mapping": {k.value: v.value for k, v in _SIM_TO_ENV.items()}}
 
 
 def td_target(reward: float, q_next: float, terminated: bool, gamma: float) -> float:
-    """Cilj posodobitve. Ob terminaciji brez bootstrapa; ob PREKINITVI z bootstrapom."""
     return reward if terminated else reward + gamma * q_next
 
 
