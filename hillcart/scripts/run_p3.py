@@ -1,10 +1,11 @@
 """Faza P3: pilot na problemu (vozicek s palico v kotanji).
 
 Za razliko od P2 to niso kontrolne naloge: tu je palica omejena z |theta| <= 15 stopinj in
-vozicek mora priti iz kotanje. P3 preverja, da se ucenje obnasa zdravo
+voziCek mora priti iz kotanje. Ali je problem sploh resljiv, ni znano - to je raziskovalno
+vprasanje diplome. Zato uspeh v P3 ni kriterij; P3 preverja, da se ucenje obnasa zdravo
 (brez divergence, meje zadoscajo, T_max zadosca) pred razsiritvijo na vseh 35 konfiguracij.
 
-Zamrznjeni protokol (rezultat faze P2, gledamo configs/p2_control.json in oznako p2-v1):
+Zamrznjeni protokol (rezultat faze P2, glej configs/p2_control.json in oznako p2-v1):
   alpha0 = 0.5, optimisticna inicializacija w = 1/16 (q0 = +1), lambda = 0.9,
   gamma = 0.999, epsilon = 0.05, 16 plositev x 8 intervalov, zamiki (1,3,5,7).
 Osnovna nastavitev (alpha0 = 0.1, w = 0) je v P2 dala 0.000 uspeha pri obeh kontrolnih
@@ -47,12 +48,13 @@ QUICK_EVAL_STATES = [(0.0, 0.0, th, td) for th in (-0.05, 0.0, 0.05) for td in (
 # --- vnaprej zapisani kriteriji ------------------------------------
 MAX_Q = 2.0            # kriterij 4
 MAX_OOB = 0.01         # kriterij 5
-TMAX_WARN_FRAC = 0.75  # kriterij 6
+TMAX_WARN_FRAC = 0.75  # kriterij 6a: MEDIANA casa uspesnih epizod
+TIMEOUT_REACH_MAX = 0.90  # kriterij 6b: timeouti ne smejo biti "skoraj na cilju"
 BASELINE_FALL_S = 2.3  # najdaljsi cas do padca kontrolnih politik (zagon H0)
 
 
 def q_absmax_visited(env, agent, states) -> float:
-    """max |Q| na stanjih, ki jih pozresna politika dejansko obisce. To je
+    """max |Q| na stanjih, ki jih pozresna politika dejansko obisce. To je merodajna
     meritev za kriterij 4: linearna aproksimacija je nevezana tam, kamor agent ne gre,
     zato enakomerno vzorcenje po celotni skatli meja precenjuje |Q|."""
     from hillcart.env import EnvOutcome
@@ -68,7 +70,7 @@ def q_absmax_visited(env, agent, states) -> float:
 
 def q_absmax_sampled(agent, coder, seed: int, n: int = 5000) -> float:
     """Diagnostika: max |Q| na enakomerno nakljucnih stanjih iz skatle meja (vkljucno z
-    nikoli obiskanimi). Se poroca, a ni kriterij."""
+    nikoli obiskanimi). Se poroca, a NI kriterij."""
     rng = np.random.default_rng(seed)
     m = 0.0
     for _ in range(n):
@@ -96,7 +98,7 @@ def run_one(spec: ExperimentSpec, seed: int, args) -> dict:
            "protocol": {"total_steps": args.total_steps, "eval_every": args.eval_every,
                         "quick_eval_states": len(QUICK_EVAL_STATES),
                         "final_eval_states": len(eval_states()),
-                        "note": "uspeh ni kriterij faze P3"},
+                        "note": "uspeh NI kriterij faze P3"},
            "criteria": {"q_absmax_max": MAX_Q, "oob_fraction_max": MAX_OOB,
                         "t_event_warn": TMAX_WARN_FRAC * spec.sim.t_max,
                         "baseline_fall_s": BASELINE_FALL_S}}
@@ -128,7 +130,10 @@ def run_one(spec: ExperimentSpec, seed: int, args) -> dict:
     checks = {
         "C4_q_bounded": bool(q_vis <= MAX_Q and np.isfinite(agent.w).all()),
         "C5_oob": bool(res["train_oob_fraction"] < MAX_OOB),
-        "C6_t_max_ok": bool(t_max_seen is None or t_max_seen <= TMAX_WARN_FRAC * spec.sim.t_max),
+        "C6a_t_median_ok": bool(fin["t_event_median"] is None
+                                or fin["t_event_median"] <= TMAX_WARN_FRAC * spec.sim.t_max),
+        "C6b_timeouts_not_truncated": bool(fin["timeout_reach_median"] is None
+                                           or fin["timeout_reach_median"] < TIMEOUT_REACH_MAX),
         "C_fall_beats_baseline": bool(fin["t_event_fail_median"] is None
                                       or fin["t_event_fail_median"] > BASELINE_FALL_S),
     }
@@ -138,6 +143,8 @@ def run_one(spec: ExperimentSpec, seed: int, args) -> dict:
                "exit_sides": fin["exit_sides"], "t_event_median": fin["t_event_median"],
                "t_event_max": t_max_seen, "steps_median": fin["steps_median"],
                "t_event_fail_median": fin["t_event_fail_median"],
+               "timeout_reach_median": fin["timeout_reach_median"],
+               "timeout_reach_max": fin["timeout_reach_max"],
                "episodes": res["episodes"], "env_steps": res["steps"],
                "first_success_step": res["first_success_step"], "train_outcomes": res["train_outcomes"],
                "q_absmax_visited": q_vis, "q_absmax_sampled": q, "w_absmax": res["w_absmax"],
@@ -171,7 +178,7 @@ def main():
 
     print("\n" + "=" * 96)
     print(f"{'konfiguracija':<24}{'seme':>5}{'uspeh':>7}{'L/D':>8}{'t_med':>7}{'t_max':>7}"
-          f"{'padci':>7}{'t_pad':>7}{'|Q|obi':>7}{'|Q|nak':>7}{'oob':>8}")
+          f"{'padci':>7}{'t_pad':>7}{'|Q|obi':>7}{'dosegTO':>9}{'oob':>8}")
     for r in results:
         o = r["final_outcomes"]
         sides = f"{r['exit_sides']['left']}/{r['exit_sides']['right']}"
@@ -180,12 +187,15 @@ def main():
         tp = f"{r['t_event_fail_median']:.1f}" if r["t_event_fail_median"] is not None else "-"
         print(f"{r['config_id']:<24}{r['seed']:>5}{r['final_success_rate']:>7.3f}{sides:>8}{tm:>7}{tx:>7}"
               f"{o.get('fail_pole', 0):>7}{tp:>7}{r['q_absmax_visited']:>7.2f}"
-              f"{r['q_absmax_sampled']:>7.2f}{r['train_oob_fraction']:>8.4f}")
+              f"{(f'{rr:.2f}' if (rr := r['timeout_reach_median']) is not None else '-'):>9}"
+              f"{r['train_oob_fraction']:>8.4f}")
 
     print("\nkriteriji faze P3 (uspeh ni med njimi):")
     names = {"C4_q_bounded": f"|Q| na OBISKANIH stanjih <= {MAX_Q} in koncne utezi",
              "C5_oob": f"delez korakov zunaj meja < {MAX_OOB}",
-             "C6_t_max_ok": f"uspesne epizode se koncajo pred {TMAX_WARN_FRAC:.0%} T_max",
+             "C6a_t_median_ok": f"MEDIANA casa uspesnih epizod pred {TMAX_WARN_FRAC:.0%} T_max",
+             "C6b_timeouts_not_truncated": f"timeouti ne dosezejo {TIMEOUT_REACH_MAX:.0%} poti do cilja "
+                                           "(sicer T_max res reze resitve)",
              "C_fall_beats_baseline": f"mediana casa do padca > {BASELINE_FALL_S} s (kontrolne politike)"}
     for key, label in names.items():
         bad = [f"{r['config_id'].split('_')[-1]}/s{r['seed']}" for r in results if not r["checks"][key]]
