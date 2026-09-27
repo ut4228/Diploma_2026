@@ -246,7 +246,8 @@ def test_run_episode_respects_budget_accounting(spec, coder):
     env = HillCartEnv(spec, check_pole=False)
     ag = TrueOnlineSarsaLambda(coder, AgentConfig(), seed=0)
     out = run_episode(env, ag, (0.0, 0.0, 0.0, 0.0), greedy=False, learn=True, gamma=GAMMA)
-    outcome, steps, t_event, total_r, disc, max_theta, oob, side = out
+    outcome, steps, t_event, total_r, disc, max_theta, oob, side, total_rs = out
+    assert total_rs == total_r  # brez oblikovanja sta nagradi enaki
     assert steps == env.steps and 0 < steps <= spec.sim.max_steps
     assert abs(total_r) in (0.0, 1.0)
     if outcome.value == "success":

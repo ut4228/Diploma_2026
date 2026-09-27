@@ -1,4 +1,4 @@
-"""RL okolje (sloj nad validiranim simulatorjem). Fizike ta modul NE spreminja.
+"""RL okolje (sloj nad validiranim simulatorjem). Fizike ta modul ne spreminja.
 
   SUCCESS   : |x| >= W in |theta| <= 15 stopinj  (cilj je dosegljiv na OBEH straneh)
   FAIL_POLE : |theta| > 15 stopinj
@@ -17,7 +17,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .dynamics import PoleCartParams
+from .dynamics import PoleCartParams, energy
 from .initial_states import TRAIN_NOISE, sample_train_state
 from .simulator import HillCartSimulator, Outcome, SimConfig
 from .tracks import PowerValley
@@ -139,6 +139,11 @@ class HillCartEnv:
     @property
     def t_event(self):
         return self._sim.t_event
+
+    @property
+    def mechanical_energy(self) -> float:
+        """Celotna mehanska energija trenutnega stanja [J]. Opazljiva kolicina, brez diskonta."""
+        return energy(self._sim.state, self.track, self.spec.params)
 
     def _oob(self, obs) -> dict:
         b = self.tile_bounds

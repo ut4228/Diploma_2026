@@ -1,6 +1,6 @@
 """Ucna zanka in vrednotenje za true online Sarsa(lambda).
 
-Vrednotenje je loceno od ucenja: pozresna politika (epsilon = 0), brez posodobitev utezi,
+Vrednotenje je locENO od ucenja: pozresna politika (epsilon = 0), brez posodobitev utezi,
 brez porabe proracuna korakov, na fiksni mnozici zacetnih stanj.
 """
 from __future__ import annotations
@@ -23,6 +23,7 @@ class EpisodeRecord:
     steps: int
     t_event: float
     reward_sum: float
+    reward_sum_shaped: float
     discounted_return: float
     max_abs_theta: float
     oob_steps: int
@@ -37,20 +38,32 @@ class EpisodeRecord:
         return d
 
 
-def run_episode(env, agent, obs0, greedy: bool, learn: bool, gamma: float, track_reach: bool = False):
+def run_episode(env, agent, obs0, greedy: bool, learn: bool, gamma: float, track_reach: bool = False,
+                shaping=None):
     """Ena epizoda. Vrne (izid, koraki, t_event, vsota nagrad, diskontiran donos, max|theta|, oob, stran)
-    in z track_reach=True se doda se reach = max |x| / x_goal (kako blizu cilja je vozicek prisel)."""
+    in z track_reach=True se doda se reach = max |x| / x_goal (kako blizu cilja je vozicek prisel).
+
+    shaping: None ali EnergyPotential. Agent se uci na OBLIKOVANI nagradi R' = R + F, metrike pa
+    se vedno racunajo na NEOBLIKOVANI nagradi R (vsota in diskontiran donos)."""
     obs = env.reset(obs0)
     if learn:
         agent.begin_episode()
     a = agent.act(obs, greedy=greedy)
     idx = agent.coder.features(obs, a)
-    total_r, disc, disc_k, max_theta = 0.0, 0.0, 1.0, abs(obs[2])
+    total_r, total_rs, disc, disc_k, max_theta = 0.0, 0.0, 0.0, 1.0, abs(obs[2])
+    phi = shaping.phi(env) if shaping is not None else 0.0
     goal = env.track.x_goal
     reach = abs(obs[0]) / goal
     while True:
         obs2, r, term, trunc, info = env.step(a)
+        if shaping is not None:
+            phi_next = 0.0 if term else shaping.phi(env)
+            r_learn = r + shaping.shaping_reward(phi, phi_next, gamma, term)
+            phi = phi_next
+        else:
+            r_learn = r
         total_r += r
+        total_rs += r_learn
         disc += disc_k * r
         disc_k *= gamma
         max_theta = max(max_theta, abs(obs2[2]))
@@ -61,12 +74,12 @@ def run_episode(env, agent, obs0, greedy: bool, learn: bool, gamma: float, track
             a2 = agent.act(obs2, greedy=greedy)
             idx2 = agent.coder.features(obs2, a2)
         if learn:
-            agent.update(idx, r, idx2, term)
+            agent.update(idx, r_learn, idx2, term)
         if term or trunc:
             if learn:
                 agent.end_episode()
             out = (env.outcome, env.steps, env.t_event, total_r, disc, max_theta, env.oob_steps,
-                   info["exit_side"])
+                   info["exit_side"], total_rs)
             return out + (reach,) if track_reach else out
         idx, a = idx2, a2
 
@@ -80,7 +93,7 @@ def evaluate(env, agent, states, gamma: float) -> dict:
     timeout_reach = []
     for s0 in states:
         res = run_episode(env, agent, s0, greedy=True, learn=False, gamma=gamma, track_reach=True)
-        outcome, steps, t_event, _, disc, max_theta, oob_steps, side, reach = res
+        outcome, steps, t_event, _, disc, max_theta, oob_steps, side, _rs, reach = res
         out[outcome.value] = out.get(outcome.value, 0) + 1
         if outcome is EnvOutcome.SUCCESS:
             t_succ.append(t_event)
@@ -108,7 +121,8 @@ def evaluate(env, agent, states, gamma: float) -> dict:
 
 
 def train(env, agent, *, total_steps: int, eval_every: int, eval_states_quick, eval_states_final,
-          rng: np.random.Generator, run=None, gamma: float | None = None, progress=None) -> dict:
+          rng: np.random.Generator, run=None, gamma: float | None = None, progress=None,
+          shaping=None) -> dict:
     """Ucna zanka. Vrne povzetek; epizode se vracajo kot seznam EpisodeRecord."""
     gamma = agent.cfg.gamma if gamma is None else gamma
     records: list[EpisodeRecord] = []
@@ -117,16 +131,17 @@ def train(env, agent, *, total_steps: int, eval_every: int, eval_states_quick, e
     first_success_step = None
     while step < total_steps:
         s0 = sample_train_state(rng, env.spec.train_noise)
-        outcome, steps, t_event, total_r, disc, max_theta, oob_steps, exit_side = run_episode(
-            env, agent, s0, greedy=False, learn=True, gamma=gamma)
+        outcome, steps, t_event, total_r, disc, max_theta, oob_steps, exit_side, total_rs = run_episode(
+            env, agent, s0, greedy=False, learn=True, gamma=gamma, shaping=shaping)
         step += steps
-        records.append(EpisodeRecord(ep, step, s0, outcome.value, steps, t_event, total_r, disc,
+        records.append(EpisodeRecord(ep, step, s0, outcome.value, steps, t_event, total_r, total_rs, disc,
                                      max_theta, oob_steps, exit_side))
         if outcome is EnvOutcome.SUCCESS and first_success_step is None:
             first_success_step = step
         ep += 1
         if run is not None:
             run.scalar("train/episode_reward", total_r, step)
+            run.scalar("train/episode_reward_shaped", total_rs, step)
             run.scalar("train/episode_steps", steps, step)
             run.scalar("train/max_abs_theta", max_theta, step)
         if step >= next_eval:
