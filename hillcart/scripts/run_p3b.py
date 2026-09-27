@@ -5,13 +5,13 @@ konca kot resitev, kot balansiranje na dnu ali kot hitro padanje, odvisno samo o
 Faza A z R-C bi zato merila predvsem sum. P3b preveri, ali potencialno oblikovanje po energiji
 to varianco zmanjsa.
 
-Zasnova: ISTI konfiguraciji in ISTA semena kot v P3, ISTI proracun korakov, spremeni se SAMO
+Zasnova: isti konfiguraciji in ista semena kot v P3, isti proracun korakov, spremeni se samo
 nagrada. To je primerjava enega dejavnika.
 
   R-C        +1 uspeh, -1 padec, 0 sicer
   R-C+Phi_E  isto + F = gamma Phi(s') - Phi(s),  Phi_E = c (E - E_0)/(M g H)
 
-Metrike se VEDNO racunajo na neoblikovani nagradi R; oblikovana R' se belezi posebej.
+Metrike se vedno racunajo na neoblikovani nagradi R; oblikovana R' se belezi posebej.
 Vrednotenje je neoblikovano in pozresno, torej neposredno primerljivo med obema nagradama.
 
 Uporaba:
@@ -80,8 +80,10 @@ def run_one(spec: ExperimentSpec, seed: int, reward_name: str, args) -> dict:
            "hparams": {**HPARAMS, "alpha0": args.alpha0, "anneal": args.anneal}, "tile_bounds": bounds,
            "env": env.describe(), "agent": agent.describe(),
            "protocol": {"total_steps": args.total_steps, "eval_every": args.eval_every,
+                        "t_max_override": args.t_max,
                         "metrics_on": "neoblikovana nagrada R; vrednotenje pozresno in neoblikovano"}}
-    run = Run(f"p3b_{reward_name}_{spec.config_id}_s{seed}", cfg, base_dir=ROOT / "runs", seed=seed,
+    suffix = f"_tmax{args.t_max:g}" if args.t_max is not None else ""
+    run = Run(f"p3b_{reward_name}_{spec.config_id}_s{seed}{suffix}", cfg, base_dir=ROOT / "runs", seed=seed,
               require_clean=not args.allow_dirty, repo_dir=ROOT)
 
     def progress(step, ev):
@@ -131,12 +133,17 @@ def main():
     ap.add_argument("--c", type=float, default=1.0, help="utez potenciala Phi_E (OQ-4)")
     ap.add_argument("--anneal", action="store_true",
                     help="linearno ohlajanje alpha0 (-> 10 %%) in epsilon (-> 0) cez proracun")
+    ap.add_argument("--t-max", type=float, default=None,
+                    help="DIAGNOSTIKA: preglasi T_max iz nacrta (preverba obcutljivosti meje)")
     ap.add_argument("--allow-dirty", action="store_true")
     args = ap.parse_args()
 
     results = []
     for cid in args.configs:
         spec = ExperimentSpec.from_plan(args.plan, cid)
+        if args.t_max is not None:  # diagnosticna preglasitev; zapise se v config.json
+            import dataclasses
+            spec = dataclasses.replace(spec, sim=dataclasses.replace(spec.sim, t_max=args.t_max))
         print(f"\n=== {cid} ===  kappa={spec.forces['kappa']}, F_max={spec.F_max:.3f} N, "
               f"W={spec.valley.W:.1f} m, T_max={spec.sim.t_max:g} s")
         for reward_name in args.rewards:
