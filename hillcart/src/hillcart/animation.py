@@ -1,4 +1,4 @@
-"""Animacija trajektorije (matplotlib). Shrani GIF (Pillow) ali MP4 (če je nameščen ffmpeg)."""
+"""Animacija trajektorije (matplotlib). Shrani GIF (Pillow) ali MP4 (ce je nameScen ffmpeg)."""
 from __future__ import annotations
 
 import math
@@ -14,7 +14,6 @@ from .simulator import Outcome  # noqa: E402
 
 
 def rollout(sim, policy, obs0):
-    """Vrne seznam (t, stanje, opazovanje, F) in končni izid."""
     obs = sim.reset(obs0)
     frames = [(0.0, sim.state, obs, 0.0)]
     while sim.outcome is Outcome.RUNNING:
@@ -24,20 +23,22 @@ def rollout(sim, policy, obs0):
     return frames, sim.outcome
 
 
-def animate(sim, frames, outcome, path: str, fps: int = 25, stride: int = 2) -> None:
+def animate(sim, frames, outcome, path: str, fps: int = 25, stride: int = 2, title: str = "") -> None:
     track, prm = sim.track, sim.prm
     W = track.x_goal
     L = 2 * prm.l
     xs = np.linspace(-1.1 * W, 1.1 * W, 400)
     ys = np.array([track.h(x) for x in xs])
-    fig, ax = plt.subplots(figsize=(8, 4))
+    fig, ax = plt.subplots(figsize=(8, 4.5))
     ax.plot(xs, ys, "k-", lw=1.5)
-    ax.axvline(W, color="g", ls="--", lw=1, label="cilj x = W")
-    ax.axvline(-W, color="r", ls="--", lw=1, label="neuspeh x = -W")
+    ax.axvline(W, color="tab:green", ls="--", lw=1, label="cilj |x| = W")
+    ax.axvline(-W, color="tab:green", ls="--", lw=1)
     ax.set_aspect("equal")
     ax.set_xlim(-1.15 * W, 1.15 * W)
     ax.set_ylim(min(ys) - 0.3, max(ys) + L + 0.3)
     ax.legend(loc="lower center", fontsize=8)
+    if title:
+        ax.set_title(title, fontsize=10)
     cart, = ax.plot([], [], "s", ms=10, color="tab:blue")
     pole, = ax.plot([], [], "-", lw=3, color="tab:orange")
     normal, = ax.plot([], [], ":", lw=1, color="gray")

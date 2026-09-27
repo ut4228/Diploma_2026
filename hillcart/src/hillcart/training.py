@@ -70,20 +70,26 @@ def evaluate(env, agent, states, gamma: float) -> dict:
     """Pozresno vrednotenje na fiksnih stanjih (brez ucenja). Utezi se ne spremenijo."""
     w_before = agent.w.copy()
     out = {"success": 0, "fail_pole": 0, "timeout": 0}
-    t_succ, steps_succ, max_thetas, oob, disc_sum = [], [], [], 0, 0.0
+    sides = {"left": 0, "right": 0}
+    t_succ, steps_succ, t_fail, max_thetas, oob, disc_sum = [], [], [], [], 0, 0.0
     for s0 in states:
         res = run_episode(env, agent, s0, greedy=True, learn=False, gamma=gamma)
-        outcome, steps, t_event, _, disc, max_theta, oob_steps, _ = res
+        outcome, steps, t_event, _, disc, max_theta, oob_steps, side = res
         out[outcome.value] = out.get(outcome.value, 0) + 1
         if outcome is EnvOutcome.SUCCESS:
             t_succ.append(t_event)
             steps_succ.append(steps)
+            if side in sides:
+                sides[side] += 1
+        elif outcome is EnvOutcome.FAIL_POLE:
+            t_fail.append(t_event)
         max_thetas.append(max_theta)
         oob += oob_steps
         disc_sum += disc
     assert np.array_equal(w_before, agent.w), "vrednotenje ne sme spreminjati utezi"
     n = len(states)
-    return {"n": n, "success_rate": out["success"] / n, "outcomes": out,
+    return {"n": n, "success_rate": out["success"] / n, "outcomes": out, "exit_sides": sides,
+            "t_event_fail_median": float(np.median(t_fail)) if t_fail else None,
             "t_event_median": float(np.median(t_succ)) if t_succ else None,
             "t_event_max": float(np.max(t_succ)) if t_succ else None,
             "steps_median": float(np.median(steps_succ)) if steps_succ else None,
