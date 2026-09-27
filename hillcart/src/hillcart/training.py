@@ -130,6 +130,7 @@ def train(env, agent, *, total_steps: int, eval_every: int, eval_states_quick, e
     step, ep, next_eval = 0, 0, eval_every
     first_success_step = None
     while step < total_steps:
+        agent.anneal(step / total_steps)
         s0 = sample_train_state(rng, env.spec.train_noise)
         outcome, steps, t_event, total_r, disc, max_theta, oob_steps, exit_side, total_rs = run_episode(
             env, agent, s0, greedy=False, learn=True, gamma=gamma, shaping=shaping)
@@ -152,6 +153,8 @@ def train(env, agent, *, total_steps: int, eval_every: int, eval_states_quick, e
                 run.scalar("eval/success_rate", ev["success_rate"], step)
                 run.scalar("eval/w_absmax", float(np.abs(agent.w).max()), step)
                 run.scalar("eval/active_traces_max", agent.max_active, step)
+            run.scalar("eval/alpha0", agent.alpha * agent.n_tilings, step)
+            run.scalar("eval/epsilon", agent.epsilon, step)
             if progress is not None:
                 progress(step, ev)
             next_eval += eval_every
@@ -161,6 +164,7 @@ def train(env, agent, *, total_steps: int, eval_every: int, eval_states_quick, e
     for r in records:
         n_out[r.outcome] = n_out.get(r.outcome, 0) + 1
     return {"episodes": ep, "steps": step, "first_success_step": first_success_step,
+            "alpha0_final": agent.alpha * agent.n_tilings, "epsilon_final": agent.epsilon,
             "train_outcomes": n_out, "evals": evals, "final_eval": final,
             "w_absmax": float(np.abs(agent.w).max()), "max_active_traces": agent.max_active,
             "records": records,

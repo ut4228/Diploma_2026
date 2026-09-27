@@ -2,11 +2,14 @@
 
 Bere runs/<mapa>/{config.json, summary.json, evals.json} in loci dva razlicna izida:
 
-  KONCNI  delez uspeha na koncu ucenja (to je politika, ki bi jo dejansko uporabili),
-  NAJBOLJSI  najvisji delez uspeha na katerem koli vmesnem vrednotenju.
+  KONCNI     delez uspeha na koncu ucenja,
+  POZNI      povprecje zadnjih K vrednotenj (privzeto 5) - stabilnejsa mera pozne uspesnosti,
+  NAJBOLJSI  najvisji delez uspeha na katerem koli vmesnem vrednotenju,
+  NIHANJ     kolikokrat v drugi polovici ucenja krivulja preckа mejo 0.5.
 
-Ce je NAJBOLJSI mnogo visji od KONCNEGA, agent je resitev nasel in jo nato izgubil.
-To je drugacna napaka kot "se ni nikoli naucil" in jo je treba v diplomi poroCati loceno.
+Ce je NAJBOLJSI mnogo visji od KONCNEGA, je agent resitev nasel in jo nato izgubil; ce je poleg
+tega NIHANJ veliko, politika sploh ne konvergira in KONCNI delez uspeha meri le, kje se je ucenje
+slucajno ustavilo. Takrat je POZNI ustreznejsa primarna metrika.
 
 Uporaba:
   python scripts/analyze_runs.py --pattern "runs/*p3b_*"
@@ -22,6 +25,9 @@ import statistics
 from pathlib import Path
 
 
+LATE_K = 5  # stevilo zadnjih vrednotenj za "pozno" povprecje
+
+
 def load(run_dir: Path) -> dict | None:
     try:
         cfg = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
@@ -33,6 +39,10 @@ def load(run_dir: Path) -> dict | None:
         return None
     rates = [e["success_rate"] for e in evals]
     best_i = max(range(len(rates)), key=lambda i: rates[i])
+    k = min(LATE_K, len(rates))
+    late = sum(rates[-k:]) / k
+    half = rates[len(rates) // 2:]
+    osc = sum(1 for a, b in zip(half, half[1:]) if (a >= 0.5) != (b >= 0.5))
     return {
         "run": run_dir.name,
         "phase": cfg.get("phase", "?"),
@@ -41,6 +51,9 @@ def load(run_dir: Path) -> dict | None:
         "seed": summ.get("seed"),
         "total_steps": cfg.get("protocol", {}).get("total_steps"),
         "final": summ.get("final_success_rate"),
+        "late": late,
+        "late_k": k,
+        "oscillations": osc,
         "best": rates[best_i],
         "best_step": evals[best_i].get("step"),
         "first_success_step": summ.get("first_success_step"),
@@ -61,30 +74,33 @@ def main():
         raise SystemExit(f"ni zagonov z evals.json: {args.pattern}")
     rows.sort(key=lambda r: (r["config_id"], r["reward"], r["seed"] if r["seed"] is not None else -1))
 
-    print(f"{'konfiguracija':<24}{'nagrada':>8}{'seme':>6}{'koncni':>8}{'najboljsi':>11}"
-          f"{'pri koraku':>12}{'1.uspeh':>10}  krivulja (. = 0, + = delno, # = >= 0.8)")
+    print(f"{'konfiguracija':<24}{'nagrada':>8}{'seme':>6}{'koncni':>8}{'pozni':>8}{'najb.':>7}"
+          f"{'nihanj':>8}{'1.uspeh':>10}  krivulja (. = 0, + = delno, # = >= 0.8)")
     for r in rows:
         fs = str(r["first_success_step"]) if r["first_success_step"] is not None else "-"
-        print(f"{r['config_id']:<24}{r['reward']:>8}{str(r['seed']):>6}{r['final']:>8.3f}{r['best']:>11.3f}"
-              f"{r['best_step']:>12}{fs:>10}  {r['curve']}")
+        print(f"{r['config_id']:<24}{r['reward']:>8}{str(r['seed']):>6}{r['final']:>8.3f}{r['late']:>8.3f}"
+              f"{r['best']:>7.3f}{r['oscillations']:>8}{fs:>10}  {r['curve']}")
 
     print("\n" + "-" * 100)
-    print(f"{'konfiguracija':<24}{'nagrada':>8}{'koncni povp.':>14}{'najboljsi povp.':>17}"
-          f"{'izgubljenih':>13}{'1.uspeh med.':>14}")
+    print(f"{'konfiguracija':<24}{'nagrada':>8}{'koncni povp.':>14}{'pozni povp.':>13}"
+          f"{'najb. povp.':>13}{'izgubljenih':>13}{'nihanj med.':>13}{'1.uspeh med.':>14}")
     groups = {}
     for r in rows:
         groups.setdefault((r["config_id"], r["reward"]), []).append(r)
     for (cid, rew), g in sorted(groups.items()):
         fin = [x["final"] for x in g]
+        late = [x["late"] for x in g]
         best = [x["best"] for x in g]
         lost = sum(1 for x in g if x["best"] - x["final"] > 0.2)
         fss = [x["first_success_step"] for x in g if x["first_success_step"] is not None]
         fsm = f"{statistics.median(fss):.0f}" if fss else "-"
-        print(f"{cid:<24}{rew:>8}{statistics.mean(fin):>14.3f}{statistics.mean(best):>17.3f}"
-              f"{lost:>8}/{len(g):<4}{fsm:>14}")
+        osc = statistics.median([x["oscillations"] for x in g])
+        print(f"{cid:<24}{rew:>8}{statistics.mean(fin):>14.3f}{statistics.mean(late):>13.3f}"
+              f"{statistics.mean(best):>13.3f}{lost:>8}/{len(g):<4}{osc:>13.1f}{fsm:>14}")
 
-    print("\n'izgubljenih' = zagoni, kjer je najboljsi delez uspeha vsaj 0.2 visji od koncnega\n"
-          "(agent je resitev nasel in jo nato izgubil - to ni isto kot 'se ni naucil').")
+    print(f"\n'izgubljenih' = zagoni, kjer je najboljsi delez uspeha vsaj 0.2 visji od koncnega.\n"
+          f"'pozni' = povprecje zadnjih {LATE_K} vrednotenj; 'nihanj' = prehodi cez 0.5 v drugi polovici ucenja.\n"
+          "Veliko nihanj pomeni, da politika ne konvergira in je 'koncni' nezanesljiva metrika.")
 
     if args.csv:
         with open(args.csv, "w", newline="", encoding="utf-8") as f:

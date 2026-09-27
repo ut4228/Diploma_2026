@@ -5,13 +5,13 @@ konca kot resitev, kot balansiranje na dnu ali kot hitro padanje, odvisno samo o
 Faza A z R-C bi zato merila predvsem sum. P3b preveri, ali potencialno oblikovanje po energiji
 to varianco zmanjsa.
 
-Zasnova: isti konfiguraciji in ista semena kot v P3, isti proracun korakov, spremeni se samo
+Zasnova: ISTI konfiguraciji in ISTA semena kot v P3, ISTI proracun korakov, spremeni se SAMO
 nagrada. To je primerjava enega dejavnika.
 
   R-C        +1 uspeh, -1 padec, 0 sicer
   R-C+Phi_E  isto + F = gamma Phi(s') - Phi(s),  Phi_E = c (E - E_0)/(M g H)
 
-Metrike se vedno racunajo na neoblikovani nagradi R; oblikovana R' se belezi posebej.
+Metrike se VEDNO racunajo na neoblikovani nagradi R; oblikovana R' se belezi posebej.
 Vrednotenje je neoblikovano in pozresno, torej neposredno primerljivo med obema nagradama.
 
 Uporaba:
@@ -41,7 +41,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PLAN = ROOT / "configs" / "plan_v2.json"
 CONFIG_IDS = ("H1_tan0.5_p2_kap0.9", "H1_tan0.5_p2_kap0.3")
 SEEDS = (100, 101, 102)
-TOTAL_STEPS = 3_000_000
+TOTAL_STEPS = 3_000_000  # proračun faze A (odlocitev po P3)
 EVAL_EVERY = 100_000
 HPARAMS = {"alpha0": 0.5, "lambda": 0.9, "gamma": 0.999, "epsilon": 0.05,
            "optimistic_init": True, "eps_z": 1e-6, "n_tilings": 16, "n_intervals": 8,
@@ -67,7 +67,8 @@ def run_one(spec: ExperimentSpec, seed: int, reward_name: str, args) -> dict:
     coder = coder_from_bounds(bounds, n_tilings=HPARAMS["n_tilings"], n_intervals=HPARAMS["n_intervals"])
     w_init = 1.0 / coder.cfg.n_tilings if HPARAMS["optimistic_init"] else 0.0
     acfg = AgentConfig(alpha0=args.alpha0, lam=HPARAMS["lambda"], gamma=HPARAMS["gamma"],
-                       epsilon=HPARAMS["epsilon"], w_init=w_init, eps_z=HPARAMS["eps_z"])
+                       epsilon=HPARAMS["epsilon"], w_init=w_init, eps_z=HPARAMS["eps_z"],
+                       anneal=args.anneal)
     agent = TrueOnlineSarsaLambda(coder, acfg, seed=seed)
     env = HillCartEnv(spec, check_pole=True, tile_bounds=bounds)
     shaping = EnergyPotential.for_env(env, c=args.c) if reward_name == "shaped" else None
@@ -76,7 +77,7 @@ def run_one(spec: ExperimentSpec, seed: int, reward_name: str, args) -> dict:
            "shaping": shaping.describe() if shaping else None,
            "plan": {"path": Path(args.plan).name, "sha256": spec.plan_sha256,
                     "version": spec.plan_version},
-           "hparams": {**HPARAMS, "alpha0": args.alpha0}, "tile_bounds": bounds,
+           "hparams": {**HPARAMS, "alpha0": args.alpha0, "anneal": args.anneal}, "tile_bounds": bounds,
            "env": env.describe(), "agent": agent.describe(),
            "protocol": {"total_steps": args.total_steps, "eval_every": args.eval_every,
                         "metrics_on": "neoblikovana nagrada R; vrednotenje pozresno in neoblikovano"}}
@@ -110,7 +111,9 @@ def run_one(spec: ExperimentSpec, seed: int, reward_name: str, args) -> dict:
                "episodes": res["episodes"], "env_steps": res["steps"],
                "first_success_step": res["first_success_step"],
                "q_absmax_visited": q_absmax_visited(env, agent, eval_states()),
-               "w_absmax": res["w_absmax"], "train_oob_fraction": res["train_oob_fraction"]}
+               "w_absmax": res["w_absmax"], "train_oob_fraction": res["train_oob_fraction"],
+               "anneal": args.anneal, "alpha0_final": res["alpha0_final"],
+               "epsilon_final": res["epsilon_final"]}
     run.close(summary)
     summary["run_dir"] = run.dir.name
     return summary
@@ -126,6 +129,8 @@ def main():
     ap.add_argument("--eval-every", type=int, default=EVAL_EVERY)
     ap.add_argument("--alpha0", type=float, default=HPARAMS["alpha0"])
     ap.add_argument("--c", type=float, default=1.0, help="utez potenciala Phi_E (OQ-4)")
+    ap.add_argument("--anneal", action="store_true",
+                    help="linearno ohlajanje alpha0 (-> 10 %%) in epsilon (-> 0) cez proracun")
     ap.add_argument("--allow-dirty", action="store_true")
     args = ap.parse_args()
 
@@ -135,7 +140,8 @@ def main():
         print(f"\n=== {cid} ===  kappa={spec.forces['kappa']}, F_max={spec.F_max:.3f} N, "
               f"W={spec.valley.W:.1f} m, T_max={spec.sim.t_max:g} s")
         for reward_name in args.rewards:
-            label = "R-C" if reward_name == "plain" else f"R-C + Phi_E (c={args.c:g})"
+            label = ("R-C" if reward_name == "plain" else f"R-C + Phi_E (c={args.c:g})") \
+                + (" + ohlajanje" if args.anneal else "")
             print(f"  nagrada: {label}")
             for seed in args.seeds:
                 print(f"    seme {seed}:")

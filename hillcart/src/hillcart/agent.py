@@ -30,13 +30,21 @@ class AgentConfig:
     epsilon: float = 0.05
     w_init: float = 0.0  # zacetna vrednost vsake utezi (q0 = n_tilings * w_init)
     eps_z: float = 1e-6  # prag obrezovanja sledi
+    # Ohlajanje (privzeto izklopljeno): linearno od zacetne do koncne vrednosti cez proracun.
+    # Brez njega se politika ne umiri in konCni delez uspeha meri le, kje se je ucenje ustavilo.
+    anneal: bool = False
+    alpha_final_frac: float = 0.1  # alpha0 pade na 10 % zacetne
+    epsilon_final_frac: float = 0.0  # epsilon pade na 0
 
     def describe(self, n_tilings: int) -> dict:
         return {"algorithm": "true_online_sarsa_lambda", "alpha0": self.alpha0,
                 "alpha": self.alpha0 / n_tilings, "lambda": self.lam, "gamma": self.gamma,
                 "epsilon": self.epsilon, "w_init": self.w_init, "q_init": n_tilings * self.w_init,
                 "eps_z": self.eps_z, "trace": "dutch (true online)",
-                "tie_breaking": "nakljucno med enakimi najvecjimi vrednostmi"}
+                "tie_breaking": "nakljucno med enakimi najvecjimi vrednostmi",
+                "anneal": self.anneal, "alpha_final_frac": self.alpha_final_frac,
+                "epsilon_final_frac": self.epsilon_final_frac,
+                "anneal_schedule": "linearno po deležu porabljenega proracuna korakov"}
 
 
 class TrueOnlineSarsaLambda:
@@ -45,6 +53,8 @@ class TrueOnlineSarsaLambda:
         self.cfg = cfg
         self.n_tilings = coder.cfg.n_tilings
         self.alpha = cfg.alpha0 / self.n_tilings
+        self.epsilon = cfg.epsilon
+        self.progress = 0.0
         self.rng = np.random.default_rng(seed)
         self.w = np.full(coder.n_features, float(cfg.w_init))
         self._z = np.zeros(coder.n_features)
@@ -61,8 +71,17 @@ class TrueOnlineSarsaLambda:
     def q(self, idx: np.ndarray) -> float:
         return float(self.w[idx].sum())
 
+    def anneal(self, progress: float) -> None:
+        """progress v [0, 1] = delez porabljenega proracuna korakov. Brez ohlajanja ne stori nic."""
+        self.progress = min(max(float(progress), 0.0), 1.0)
+        if not self.cfg.anneal:
+            return
+        p = self.progress
+        self.alpha = (self.cfg.alpha0 * (1.0 - p * (1.0 - self.cfg.alpha_final_frac))) / self.n_tilings
+        self.epsilon = self.cfg.epsilon * (1.0 - p * (1.0 - self.cfg.epsilon_final_frac))
+
     def act(self, obs, greedy: bool = False) -> int:
-        if not greedy and self.rng.random() < self.cfg.epsilon:
+        if not greedy and self.epsilon > 0.0 and self.rng.random() < self.epsilon:
             return int(self.rng.integers(self.coder.cfg.n_actions))
         qs = self.q_values(obs)
         best = np.flatnonzero(qs == qs.max())

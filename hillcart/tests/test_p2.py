@@ -234,6 +234,34 @@ def test_P2_09b_epsilon_greedy_tie_breaking_is_uniform(coder):
     assert counts.min() > 800, counts
 
 
+# ---------------------------------------------------------------- P2-10, P2-11 (ohlajanje)
+def test_P2_10_annealing_reduces_alpha_and_epsilon(coder):
+    """Ohlajanje: alpha0 linearno na 10 % zacetne, epsilon na 0; monotono in brez presenecenj."""
+    cfg = AgentConfig(alpha0=0.5, epsilon=0.05, anneal=True)
+    ag = TrueOnlineSarsaLambda(coder, cfg, seed=0)
+    a0 = ag.alpha * ag.n_tilings
+    assert a0 == pytest.approx(0.5) and ag.epsilon == pytest.approx(0.05)
+    prev_a, prev_e = a0, ag.epsilon
+    for p in (0.25, 0.5, 0.75, 1.0):
+        ag.anneal(p)
+        a, e = ag.alpha * ag.n_tilings, ag.epsilon
+        assert a <= prev_a + 1e-15 and e <= prev_e + 1e-15
+        prev_a, prev_e = a, e
+    assert prev_a == pytest.approx(0.5 * 0.1)
+    assert prev_e == pytest.approx(0.0, abs=1e-15)
+    ag.anneal(2.0)  # omejeno na [0, 1]
+    assert ag.alpha * ag.n_tilings == pytest.approx(0.5 * 0.1)
+
+
+def test_P2_11_no_annealing_is_regression_safe(coder):
+    """Brez ohlajanja anneal() ne spremeni nicesar (privzeto vedenje ostane isto)."""
+    ag = TrueOnlineSarsaLambda(coder, AgentConfig(alpha0=0.5, epsilon=0.05), seed=0)
+    a, e = ag.alpha, ag.epsilon
+    for p in (0.0, 0.5, 1.0):
+        ag.anneal(p)
+        assert ag.alpha == a and ag.epsilon == e
+
+
 # ---------------------------------------------------------------- pomozno
 def test_feature_counts_match_specification(coder):
     d = coder.describe()
