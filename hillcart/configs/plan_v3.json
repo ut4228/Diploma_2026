@@ -1,0 +1,4363 @@
+{
+  "version": "plan_v3",
+  "generated_by": {
+    "script": "scripts/make_plan.py",
+    "git": {
+      "commit": "4a8570c174c4e452ff240c0bc5e8f18c14d491e9",
+      "short": "4a8570c1",
+      "branch": "main",
+      "dirty": false,
+      "describe": "p2-v1"
+    },
+    "args": {
+      "episodes": 100,
+      "margin": 0.25,
+      "tmax_factor": 4.0,
+      "tmax_round": 5.0,
+      "seed": 0,
+      "out": "configs/plan_v2.json",
+      "allow_dirty": false
+    },
+    "run_dir": "20260926-143509_make_plan_4a8570c1"
+  },
+  "params": {
+    "m_c": 1.0,
+    "m_p": 0.1,
+    "l": 0.5,
+    "g": 9.8
+  },
+  "sim": {
+    "dt": 0.02,
+    "n_substeps": 4,
+    "theta_max_deg": 15.0,
+    "t_max": 75.0,
+    "integrator": "rk4",
+    "max_steps": 3750,
+    "t_max_rule": "ceil(4.0 * max t_pump_no_pole / 5.0) * 5.0",
+    "t_pump_no_pole_max": 18.215,
+    "t_max_status": "ZAČETNA VREDNOST - preveri v pilotu"
+  },
+  "actions": "{-F_max, 0, +F_max}",
+  "design": {
+    "base": {
+      "H": 1.0,
+      "tan_phi_max": 0.5,
+      "p": 2.0
+    },
+    "kappa_values": [
+      1.2,
+      0.9,
+      0.7,
+      0.5,
+      0.3
+    ],
+    "geometry_series": {
+      "S1_depth": [
+        {
+          "H": 0.5,
+          "tan_phi_max": 0.5,
+          "p": 2.0
+        },
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.5,
+          "p": 2.0
+        },
+        {
+          "H": 1.5,
+          "tan_phi_max": 0.5,
+          "p": 2.0
+        }
+      ],
+      "S2_slope": [
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.3,
+          "p": 2.0
+        },
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.5,
+          "p": 2.0
+        },
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.7,
+          "p": 2.0
+        }
+      ],
+      "S3_shape": [
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.5,
+          "p": 2.0
+        },
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.5,
+          "p": 3.0
+        },
+        {
+          "H": 1.0,
+          "tan_phi_max": 0.5,
+          "p": 4.0
+        }
+      ]
+    }
+  },
+  "initial_states": {
+    "train_noise_uniform": [
+      0.05,
+      0.05,
+      0.05,
+      0.05
+    ],
+    "eval_states": [
+      [
+        -0.05,
+        -0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        -0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        -0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.0,
+        0.0
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.0,
+        0.05
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        -0.05,
+        0.05,
+        0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        -0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        -0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        0.0,
+        -0.05,
+        0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        0.0,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        -0.05,
+        0.0,
+        0.0,
+        0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.0,
+        0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        0.0,
+        0.05,
+        0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        0.0,
+        0.0
+      ],
+      [
+        -0.05,
+        0.05,
+        0.0,
+        0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        0.05,
+        0.05,
+        0.0
+      ],
+      [
+        -0.05,
+        0.05,
+        0.05,
+        0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        0.0,
+        -0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -0.05,
+        0.0,
+        0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        -0.05,
+        0.05,
+        0.0
+      ],
+      [
+        0.0,
+        -0.05,
+        0.05,
+        0.05
+      ],
+      [
+        0.0,
+        0.0,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        0.0,
+        -0.05,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        -0.05,
+        0.05
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        -0.05
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.05
+      ],
+      [
+        0.0,
+        0.0,
+        0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        0.0,
+        0.05,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.05,
+        0.05
+      ],
+      [
+        0.0,
+        0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        0.0,
+        0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        0.0,
+        0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        0.0,
+        0.05,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.05,
+        0.0,
+        0.05
+      ],
+      [
+        0.0,
+        0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        0.0,
+        0.05,
+        0.05,
+        0.0
+      ],
+      [
+        0.0,
+        0.05,
+        0.05,
+        0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        0.05,
+        -0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        0.0,
+        0.0
+      ],
+      [
+        0.05,
+        -0.05,
+        0.0,
+        0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        -0.05,
+        0.05,
+        0.0
+      ],
+      [
+        0.05,
+        -0.05,
+        0.05,
+        0.05
+      ],
+      [
+        0.05,
+        0.0,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        0.0,
+        -0.05,
+        0.0
+      ],
+      [
+        0.05,
+        0.0,
+        -0.05,
+        0.05
+      ],
+      [
+        0.05,
+        0.0,
+        0.0,
+        -0.05
+      ],
+      [
+        0.05,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.05,
+        0.0,
+        0.0,
+        0.05
+      ],
+      [
+        0.05,
+        0.0,
+        0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        0.0,
+        0.05,
+        0.0
+      ],
+      [
+        0.05,
+        0.0,
+        0.05,
+        0.05
+      ],
+      [
+        0.05,
+        0.05,
+        -0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        0.05,
+        -0.05,
+        0.0
+      ],
+      [
+        0.05,
+        0.05,
+        -0.05,
+        0.05
+      ],
+      [
+        0.05,
+        0.05,
+        0.0,
+        -0.05
+      ],
+      [
+        0.05,
+        0.05,
+        0.0,
+        0.0
+      ],
+      [
+        0.05,
+        0.05,
+        0.0,
+        0.05
+      ],
+      [
+        0.05,
+        0.05,
+        0.05,
+        -0.05
+      ],
+      [
+        0.05,
+        0.05,
+        0.05,
+        0.0
+      ],
+      [
+        0.05,
+        0.05,
+        0.05,
+        0.05
+      ]
+    ],
+    "note": "trening: enakomeren šum; vrednotenje: fiksna mreža 3^4 = 81 stanj, požrešna politika"
+  },
+  "seeds": {
+    "tuning": [
+      100,
+      101,
+      102,
+      103,
+      104
+    ],
+    "main": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "note": "semena za nastavljanje hiperparametrov se v glavnih zagonih ne uporabijo"
+  },
+  "phases": {
+    "P_pilot": "osnovna kotanja, kappa 0.9 in 0.3, Sarsa(lambda)+TC, semena 100-101: preveri T_max, proračun korakov in delež stanj zunaj tile_bounds; nato T_max in proračun ZAMRZNI",
+    "T_tuning": "osnovna kotanja, kappa 0.5, semena 100-104, enak proračun iskanja za vse metode",
+    "A_methods": "S0_kappa (osnovna kotanja x 5 kappa) x vse metode x semena 0-9",
+    "B_geometry": "S1-S3 (6 dodatnih kotanj x 5 kappa) x referenčna metoda x semena 0-9; referenčna metoda = najvišji povprečni delež uspeha v fazi A (pravilo določeno vnaprej)"
+  },
+  "metrics": {
+    "primary": "delež uspeha na 81 fiksnih začetnih stanjih, požrešna politika, po koncu treninga",
+    "secondary": [
+      "mediana časa do cilja (uspešne epizode)",
+      "razčlenitev izidov: fail_pole / fail_left / timeout",
+      "učna krivulja: delež uspeha na vmesnih vrednotenjih",
+      "koraki okolja do prvega uspeha in do >= 50 % uspeha",
+      "število neuspelih učnih epizod",
+      "delež stanj zunaj tile_bounds"
+    ],
+    "aggregation": "povprečje čez semena + 95 % interval zaupanja (bootstrap)",
+    "feasibility_boundary": "najmanjši kappa z mediano deleža uspeha >= 0.5 (in najmanjši kappa z vsaj enim uspehom)"
+  },
+  "configs": [
+    {
+      "id": "H0.5_tan0.5_p2_kap1.2",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 0.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 2.0
+      },
+      "forces": {
+        "F_max": 3.2340000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 1.2,
+        "k": 0.6,
+        "u": 0.3
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 1.555,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 1.555,
+          "reversals": 0
+        },
+        "t_pump": 1.555,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.7090089616040016,
+            0.8259499690040283
+          ],
+          "theta_dot": [
+            -1.3751959955719497,
+            1.4630252736415879
+          ],
+          "episodes": 100,
+          "steps": 3929,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.2142323972254905,
+            1.2217144082344769
+          ],
+          "theta_dot": [
+            -1.8330444494072926,
+            1.8624446403905843
+          ],
+          "episodes": 100,
+          "steps": 1751,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -1.7362187923808001,
+            1.7362187923808001
+          ],
+          "r": [
+            -0.39104879466991366,
+            0.39104879466991366
+          ],
+          "episodes": 2,
+          "steps": 156,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.0,
+          2.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -2.170273490476,
+          2.170273490476
+        ],
+        "theta_dot": [
+          -2.8168667938256227,
+          2.8168667938256227
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H0.5_tan0.5_p2_kap0.9",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 0.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 2.0
+      },
+      "forces": {
+        "F_max": 2.4255000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.9,
+        "k": 0.45,
+        "u": 0.225
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 3.4699999999999998,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 3.4699999999999998,
+          "reversals": 1
+        },
+        "t_pump": 3.4699999999999998,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.6300573660069205,
+            0.5132885770370932
+          ],
+          "theta_dot": [
+            -1.2608250791649216,
+            1.2943034103895128
+          ],
+          "episodes": 100,
+          "steps": 3987,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.0446855031555726,
+            1.0614554695001714
+          ],
+          "theta_dot": [
+            -1.6831922651815765,
+            1.6770130175065958
+          ],
+          "episodes": 100,
+          "steps": 1993,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.093097368707875,
+            4.093097368707875
+          ],
+          "r": [
+            -1.0091216979155124,
+            1.0091216979155124
+          ],
+          "episodes": 2,
+          "steps": 348,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.0,
+          2.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.116371710884843,
+          5.116371710884843
+        ],
+        "theta_dot": [
+          -3.365392453871361,
+          3.365392453871361
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H0.5_tan0.5_p2_kap0.7",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 0.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 2.0
+      },
+      "forces": {
+        "F_max": 1.8865,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.7,
+        "k": 0.35,
+        "u": 0.175
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 3.6,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 3.6,
+          "reversals": 1
+        },
+        "t_pump": 3.6,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.4309675555858144,
+            0.3907979128008469
+          ],
+          "theta_dot": [
+            -1.1993154941104844,
+            1.1787169767878396
+          ],
+          "episodes": 100,
+          "steps": 4136,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.9226918123246193,
+            0.908506804777602
+          ],
+          "theta_dot": [
+            -1.5654484907751849,
+            1.5548844280722536
+          ],
+          "episodes": 100,
+          "steps": 2193,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.3161151772466413,
+            3.3161151772466413
+          ],
+          "r": [
+            -0.8287411975832804,
+            0.8287411975832804
+          ],
+          "episodes": 2,
+          "steps": 360,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.0,
+          2.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.145143971558301,
+          4.145143971558301
+        ],
+        "theta_dot": [
+          -2.9927371104480818,
+          2.9927371104480818
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H0.5_tan0.5_p2_kap0.5",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 0.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 2.0
+      },
+      "forces": {
+        "F_max": 1.3475000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.5,
+        "k": 0.25,
+        "u": 0.125
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 5.68,
+          "reversals": 2
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 5.68,
+          "reversals": 2
+        },
+        "t_pump": 5.68,
+        "reversals": 2
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.40489702850457027,
+            0.34309458856720804
+          ],
+          "theta_dot": [
+            -1.1205819593404556,
+            1.1717979746439202
+          ],
+          "episodes": 100,
+          "steps": 4325,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.7737255324249672,
+            0.7587819027573872
+          ],
+          "theta_dot": [
+            -1.43661426968705,
+            1.4069857571039086
+          ],
+          "episodes": 100,
+          "steps": 2547,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.070835330486279,
+            4.070835330486279
+          ],
+          "r": [
+            -0.9977276783747693,
+            0.9977276783747693
+          ],
+          "episodes": 2,
+          "steps": 568,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.0,
+          2.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.088544163107849,
+          5.088544163107849
+        ],
+        "theta_dot": [
+          -3.042927435077274,
+          3.042927435077274
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H0.5_tan0.5_p2_kap0.3",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 0.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 2.0
+      },
+      "forces": {
+        "F_max": 0.8085000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.3,
+        "k": 0.15,
+        "u": 0.075
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 7.895,
+          "reversals": 3
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 7.895,
+          "reversals": 3
+        },
+        "t_pump": 7.895,
+        "reversals": 3
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2423740347186015,
+            0.2917184549862503
+          ],
+          "theta_dot": [
+            -1.0767001891326131,
+            1.0895764710208253
+          ],
+          "episodes": 100,
+          "steps": 4203,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.549210629587658,
+            0.5891315817072404
+          ],
+          "theta_dot": [
+            -1.3005251278195151,
+            1.3062348066481912
+          ],
+          "episodes": 100,
+          "steps": 3166,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.631402698181207,
+            3.631402698181207
+          ],
+          "r": [
+            -0.9078416730774342,
+            0.9078416730774342
+          ],
+          "episodes": 2,
+          "steps": 790,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.0,
+          2.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.539253372726509,
+          4.539253372726509
+        ],
+        "theta_dot": [
+          -2.7675955996570316,
+          2.7675955996570316
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p2_kap1.2",
+      "series": [
+        "S0_kappa",
+        "S1_depth",
+        "S2_slope",
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 4.0
+      },
+      "forces": {
+        "F_max": 3.2340000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 1.2,
+        "k": 0.6,
+        "u": 0.3
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 2.1550000000000002,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 2.1550000000000002,
+          "reversals": 0
+        },
+        "t_pump": 2.1550000000000002,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.7998976539773196,
+            0.676410319789767
+          ],
+          "theta_dot": [
+            -1.4144598170219862,
+            1.3266186634246677
+          ],
+          "episodes": 100,
+          "steps": 3803,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.1652849131753045,
+            1.1927841830414632
+          ],
+          "theta_dot": [
+            -1.9141037173596684,
+            1.8874055954599
+          ],
+          "episodes": 100,
+          "steps": 1670,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -2.616397224226632,
+            2.616397224226632
+          ],
+          "r": [
+            -0.30749149410717336,
+            0.30749149410717336
+          ],
+          "episodes": 2,
+          "steps": 216,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.1796745737457135,
+          7.1796745737457135
+        ],
+        "theta_dot": [
+          -2.7769940143335523,
+          2.7769940143335523
+        ],
+        "margin": 0.25,
+        "recalibration_margin": 0.25
+      },
+      "tile_bounds_previous": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -3.27049653028329,
+          3.27049653028329
+        ],
+        "theta_dot": [
+          -2.7769940143335523,
+          2.7769940143335523
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p2_kap0.9",
+      "series": [
+        "S0_kappa",
+        "S1_depth",
+        "S2_slope",
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 4.0
+      },
+      "forces": {
+        "F_max": 2.4255000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.9,
+        "k": 0.45,
+        "u": 0.225
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 4.81,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 4.81,
+          "reversals": 1
+        },
+        "t_pump": 4.81,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.4980280934017081,
+            0.5843564901328083
+          ],
+          "theta_dot": [
+            -1.4371952681691205,
+            1.2623032011475153
+          ],
+          "episodes": 100,
+          "steps": 3930,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.0697707604622395,
+            1.0140292706936713
+          ],
+          "theta_dot": [
+            -1.7015992143205732,
+            1.7124005249774974
+          ],
+          "episodes": 100,
+          "steps": 1848,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.939195369964064,
+            5.939195369964064
+          ],
+          "r": [
+            -0.734527410385378,
+            0.734527410385378
+          ],
+          "episodes": 2,
+          "steps": 482,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.42399421245508,
+          7.42399421245508
+        ],
+        "theta_dot": [
+          -3.0586599192035946,
+          3.0586599192035946
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p2_kap0.7",
+      "series": [
+        "S0_kappa",
+        "S1_depth",
+        "S2_slope",
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 4.0
+      },
+      "forces": {
+        "F_max": 1.8865,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.7,
+        "k": 0.35,
+        "u": 0.175
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 5.005,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 5.005,
+          "reversals": 1
+        },
+        "t_pump": 5.005,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.4219528238273628,
+            0.46719129686315874
+          ],
+          "theta_dot": [
+            -1.2638900485132005,
+            1.1589642236602313
+          ],
+          "episodes": 100,
+          "steps": 4239,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.9386750712084933,
+            0.9271178397160899
+          ],
+          "theta_dot": [
+            -1.6048484423176264,
+            1.5929346998900662
+          ],
+          "episodes": 100,
+          "steps": 2126,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.724418731794283,
+            4.724418731794283
+          ],
+          "r": [
+            -0.5829191702220101,
+            0.5829191702220101
+          ],
+          "episodes": 2,
+          "steps": 502,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.905523414742854,
+          5.905523414742854
+        ],
+        "theta_dot": [
+          -2.7347095156745453,
+          2.7347095156745453
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p2_kap0.5",
+      "series": [
+        "S0_kappa",
+        "S1_depth",
+        "S2_slope",
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 4.0
+      },
+      "forces": {
+        "F_max": 1.3475000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.5,
+        "k": 0.25,
+        "u": 0.125
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 8.035,
+          "reversals": 2
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 8.035,
+          "reversals": 2
+        },
+        "t_pump": 8.035,
+        "reversals": 2
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3916449162097651,
+            0.4034853768645856
+          ],
+          "theta_dot": [
+            -1.1598904031072965,
+            1.1854224563746778
+          ],
+          "episodes": 100,
+          "steps": 4249,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8268866171963855,
+            0.8381348496016714
+          ],
+          "theta_dot": [
+            -1.4552306751955766,
+            1.4459154470759883
+          ],
+          "episodes": 100,
+          "steps": 2415,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.70389780005462,
+            5.70389780005462
+          ],
+          "r": [
+            -0.7125098121690333,
+            0.7125098121690333
+          ],
+          "episodes": 2,
+          "steps": 804,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.129872250068275,
+          7.129872250068275
+        ],
+        "theta_dot": [
+          -2.709675609205762,
+          2.709675609205762
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p2_kap0.3",
+      "series": [
+        "S0_kappa",
+        "S1_depth",
+        "S2_slope",
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 4.0
+      },
+      "forces": {
+        "F_max": 0.8085000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.3,
+        "k": 0.15,
+        "u": 0.075
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 11.02,
+          "reversals": 3
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 11.02,
+          "reversals": 3
+        },
+        "t_pump": 11.02,
+        "reversals": 3
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2311842809969674,
+            0.2745139836040421
+          ],
+          "theta_dot": [
+            -1.1270753325455054,
+            1.072433075859049
+          ],
+          "episodes": 100,
+          "steps": 4247,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6231207214414873,
+            0.70373604496541
+          ],
+          "theta_dot": [
+            -1.2957827979738819,
+            1.3032606220324887
+          ],
+          "episodes": 100,
+          "steps": 3055,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.605060117757421,
+            4.605060117757421
+          ],
+          "r": [
+            -0.5729030321962693,
+            0.5729030321962693
+          ],
+          "episodes": 2,
+          "steps": 1102,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -4.0,
+          4.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.756325147196776,
+          5.756325147196776
+        ],
+        "theta_dot": [
+          -2.3452045677859474,
+          2.3452045677859474
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1.5_tan0.5_p2_kap1.2",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 3.2340000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 1.2,
+        "k": 0.6,
+        "u": 0.3
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 2.615,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 2.615,
+          "reversals": 0
+        },
+        "t_pump": 2.615,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.6987824818618804,
+            0.7616734753272055
+          ],
+          "theta_dot": [
+            -1.3892388375664935,
+            1.4543344176086261
+          ],
+          "episodes": 100,
+          "steps": 3644,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.1973899086950937,
+            1.2193957858600097
+          ],
+          "theta_dot": [
+            -1.913122465792304,
+            1.9311884608548149
+          ],
+          "episodes": 100,
+          "steps": 1669,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.1847515832917015,
+            3.1847515832917015
+          ],
+          "r": [
+            -0.24690816786052444,
+            0.24690816786052444
+          ],
+          "episodes": 2,
+          "steps": 262,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -3.980939479114627,
+          3.980939479114627
+        ],
+        "theta_dot": [
+          -2.7226207858941742,
+          2.7226207858941742
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1.5_tan0.5_p2_kap0.9",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 2.4255000000000004,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.9,
+        "k": 0.45,
+        "u": 0.225
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 5.945,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 5.945,
+          "reversals": 1
+        },
+        "t_pump": 5.945,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.6336414768594383,
+            0.5795007838034082
+          ],
+          "theta_dot": [
+            -1.3425173874696494,
+            1.269285632484523
+          ],
+          "episodes": 100,
+          "steps": 3936,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.0361678341524079,
+            1.0288710486944606
+          ],
+          "theta_dot": [
+            -1.7526295932842242,
+            1.7484322457275303
+          ],
+          "episodes": 100,
+          "steps": 1883,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -7.195805760624967,
+            7.195805760624967
+          ],
+          "r": [
+            -0.591636693941303,
+            0.591636693941303
+          ],
+          "episodes": 2,
+          "steps": 596,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -8.994757200781208,
+          8.994757200781208
+        ],
+        "theta_dot": [
+          -2.9303328590319087,
+          2.9303328590319087
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1.5_tan0.5_p2_kap0.7",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 1.8865,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.7,
+        "k": 0.35,
+        "u": 0.175
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 6.15,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 6.15,
+          "reversals": 1
+        },
+        "t_pump": 6.15,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.4563339267237665,
+            0.5140722819044956
+          ],
+          "theta_dot": [
+            -1.3147986587867617,
+            1.2788479738584484
+          ],
+          "episodes": 100,
+          "steps": 3955,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.9236512884928944,
+            0.9462670150017728
+          ],
+          "theta_dot": [
+            -1.613000004481546,
+            1.5870895745591267
+          ],
+          "episodes": 100,
+          "steps": 2114,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.699839835759883,
+            5.699839835759883
+          ],
+          "r": [
+            -0.4656363162359655,
+            0.4656363162359655
+          ],
+          "episodes": 2,
+          "steps": 616,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.124799794699854,
+          7.124799794699854
+        ],
+        "theta_dot": [
+          -2.5982954008968893,
+          2.5982954008968893
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1.5_tan0.5_p2_kap0.5",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 1.3475000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.5,
+        "k": 0.25,
+        "u": 0.125
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 6.945,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 6.945,
+          "reversals": 1
+        },
+        "t_pump": 6.945,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2903482930487665,
+            0.3430932765891791
+          ],
+          "theta_dot": [
+            -1.1793731262340978,
+            1.2137807878159808
+          ],
+          "episodes": 100,
+          "steps": 4339,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8413872194538751,
+            0.834756367289195
+          ],
+          "theta_dot": [
+            -1.4494028165358543,
+            1.4563923001016545
+          ],
+          "episodes": 100,
+          "steps": 2403,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.107018508068332,
+            4.107018508068332
+          ],
+          "r": [
+            -0.3402759341998433,
+            0.3402759341998433
+          ],
+          "episodes": 2,
+          "steps": 696,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.133773135085415,
+          5.133773135085415
+        ],
+        "theta_dot": [
+          -2.2458352928768726,
+          2.2458352928768726
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1.5_tan0.5_p2_kap0.3",
+      "series": [
+        "S1_depth"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.5,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 2.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 0.8085000000000001,
+        "F_E": 2.6950000000000003,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.3,
+        "k": 0.15,
+        "u": 0.075
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 13.53,
+          "reversals": 3
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 13.53,
+          "reversals": 3
+        },
+        "t_pump": 13.53,
+        "reversals": 3
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2725023992069873,
+            0.2224498022403798
+          ],
+          "theta_dot": [
+            -1.077581266398058,
+            1.128328877370437
+          ],
+          "episodes": 100,
+          "steps": 4338,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6797602490103967,
+            0.6730777846727534
+          ],
+          "theta_dot": [
+            -1.3050214327004621,
+            1.3056238560521316
+          ],
+          "episodes": 100,
+          "steps": 3077,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -6.0058896298608015,
+            6.0058896298608015
+          ],
+          "r": [
+            -0.5004878783965497,
+            0.5004878783965497
+          ],
+          "episodes": 2,
+          "steps": 1354,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.507362037326002,
+          7.507362037326002
+        ],
+        "theta_dot": [
+          -2.2576396680608517,
+          2.2576396680608517
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.3_p2_kap1.2",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.3,
+        "phi_max_deg": 16.69924423399362,
+        "p": 2.0,
+        "W": 6.666666666666667
+      },
+      "forces": {
+        "F_max": 1.9404,
+        "F_E": 1.617,
+        "F_krit": 3.2340000000000004,
+        "kappa": 1.2,
+        "k": 0.5999999999999999,
+        "u": 0.17999999999999997
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 3.5,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 3.5,
+          "reversals": 0
+        },
+        "t_pump": 3.5,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.42707400806488044,
+            0.46235676472056997
+          ],
+          "theta_dot": [
+            -1.2140984304099098,
+            1.2295075795971515
+          ],
+          "episodes": 100,
+          "steps": 3940,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.9498172527913241,
+            0.9541617114979437
+          ],
+          "theta_dot": [
+            -1.6214806063469815,
+            1.621093454879222
+          ],
+          "episodes": 100,
+          "steps": 2065,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -2.9395747096217972,
+            2.9395747096217972
+          ],
+          "r": [
+            -0.12709774655639858,
+            0.12709774655639858
+          ],
+          "episodes": 2,
+          "steps": 350,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.666666666666667,
+          6.666666666666667
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -3.6744683870272468,
+          3.6744683870272468
+        ],
+        "theta_dot": [
+          -2.185722941129225,
+          2.185722941129225
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.3_p2_kap0.9",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.3,
+        "phi_max_deg": 16.69924423399362,
+        "p": 2.0,
+        "W": 6.666666666666667
+      },
+      "forces": {
+        "F_max": 1.4553,
+        "F_E": 1.617,
+        "F_krit": 3.2340000000000004,
+        "kappa": 0.9,
+        "k": 0.44999999999999996,
+        "u": 0.13499999999999998
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 7.694999999999999,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 7.694999999999999,
+          "reversals": 1
+        },
+        "t_pump": 7.694999999999999,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3878099557903971,
+            0.4040782838856873
+          ],
+          "theta_dot": [
+            -1.1902842402169123,
+            1.1898486393455674
+          ],
+          "episodes": 100,
+          "steps": 4040,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8264741559687919,
+            0.8480942264455965
+          ],
+          "theta_dot": [
+            -1.5044566376691426,
+            1.5009519982909145
+          ],
+          "episodes": 100,
+          "steps": 2257,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -6.051587591634547,
+            6.051587591634547
+          ],
+          "r": [
+            -0.26057117513368755,
+            0.26057117513368755
+          ],
+          "episodes": 2,
+          "steps": 770,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.666666666666667,
+          6.666666666666667
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.564484489543184,
+          7.564484489543184
+        ],
+        "theta_dot": [
+          -2.206284766003538,
+          2.206284766003538
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.3_p2_kap0.7",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.3,
+        "phi_max_deg": 16.69924423399362,
+        "p": 2.0,
+        "W": 6.666666666666667
+      },
+      "forces": {
+        "F_max": 1.1319,
+        "F_E": 1.617,
+        "F_krit": 3.2340000000000004,
+        "kappa": 0.7,
+        "k": 0.3499999999999999,
+        "u": 0.10499999999999998
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 8.15,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 8.15,
+          "reversals": 1
+        },
+        "t_pump": 8.15,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.28333748533014974,
+            0.35861799787952037
+          ],
+          "theta_dot": [
+            -1.1498069479417061,
+            1.20782434975611
+          ],
+          "episodes": 100,
+          "steps": 4001,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.7302502484143255,
+            0.7946200925030068
+          ],
+          "theta_dot": [
+            -1.4051639706844483,
+            1.4086537074861731
+          ],
+          "episodes": 100,
+          "steps": 2467,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.857070916773032,
+            4.857070916773032
+          ],
+          "r": [
+            -0.21267711048093405,
+            0.21267711048093405
+          ],
+          "episodes": 2,
+          "steps": 816,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.666666666666667,
+          6.666666666666667
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -6.07133864596629,
+          6.07133864596629
+        ],
+        "theta_dot": [
+          -2.026663522458884,
+          2.026663522458884
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.3_p2_kap0.5",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.3,
+        "phi_max_deg": 16.69924423399362,
+        "p": 2.0,
+        "W": 6.666666666666667
+      },
+      "forces": {
+        "F_max": 0.8085,
+        "F_E": 1.617,
+        "F_krit": 3.2340000000000004,
+        "kappa": 0.5,
+        "k": 0.24999999999999997,
+        "u": 0.075
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 9.41,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 9.41,
+          "reversals": 1
+        },
+        "t_pump": 9.41,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.21629514117351192,
+            0.24803752944069699
+          ],
+          "theta_dot": [
+            -1.1284220376773544,
+            1.0828343477546434
+          ],
+          "episodes": 100,
+          "steps": 4165,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6724335626791487,
+            0.6885740845813674
+          ],
+          "theta_dot": [
+            -1.291281235588972,
+            1.2901433062569738
+          ],
+          "episodes": 100,
+          "steps": 2895,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.3979308425015016,
+            3.3979308425015016
+          ],
+          "r": [
+            -0.15286271342249824,
+            0.15286271342249824
+          ],
+          "episodes": 2,
+          "steps": 942,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.666666666666667,
+          6.666666666666667
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.247413553126877,
+          4.247413553126877
+        ],
+        "theta_dot": [
+          -1.805179936264338,
+          1.805179936264338
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.3_p2_kap0.3",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.3,
+        "phi_max_deg": 16.69924423399362,
+        "p": 2.0,
+        "W": 6.666666666666667
+      },
+      "forces": {
+        "F_max": 0.4851,
+        "F_E": 1.617,
+        "F_krit": 3.2340000000000004,
+        "kappa": 0.3,
+        "k": 0.14999999999999997,
+        "u": 0.04499999999999999
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 18.215,
+          "reversals": 3
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 18.215,
+          "reversals": 3
+        },
+        "t_pump": 18.215,
+        "reversals": 3
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.15101682676439124,
+            0.18685082527778904
+          ],
+          "theta_dot": [
+            -1.0764120074716315,
+            1.055635449353722
+          ],
+          "episodes": 100,
+          "steps": 4158,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6094658903241609,
+            0.7026749530321188
+          ],
+          "theta_dot": [
+            -1.2048084659396003,
+            1.1835506181717623
+          ],
+          "episodes": 100,
+          "steps": 3982,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.92968412855223,
+            4.92968412855223
+          ],
+          "r": [
+            -0.2196584758842263,
+            0.2196584758842263
+          ],
+          "episodes": 2,
+          "steps": 1822,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.666666666666667,
+          6.666666666666667
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -6.162105160690288,
+          6.162105160690288
+        ],
+        "theta_dot": [
+          -1.7805836772797834,
+          1.7805836772797834
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.7_p2_kap1.2",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.7,
+        "phi_max_deg": 34.99202019855866,
+        "p": 2.0,
+        "W": 2.857142857142857
+      },
+      "forces": {
+        "F_max": 4.5276,
+        "F_E": 3.773,
+        "F_krit": 7.546,
+        "kappa": 1.2,
+        "k": 0.6,
+        "u": 0.41999999999999993
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 1.6,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 1.6,
+          "reversals": 0
+        },
+        "t_pump": 1.6,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.9954631513311614,
+            1.0998523402293743
+          ],
+          "theta_dot": [
+            -1.485840676660863,
+            1.6135730510250683
+          ],
+          "episodes": 100,
+          "steps": 3769,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.4396162126233507,
+            1.4446716778156283
+          ],
+          "theta_dot": [
+            -2.1103835333186955,
+            2.1089342972655127
+          ],
+          "episodes": 100,
+          "steps": 1515,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -2.4292467721178332,
+            2.4292467721178332
+          ],
+          "r": [
+            -0.5063029423375464,
+            0.5063029423375464
+          ],
+          "episodes": 2,
+          "steps": 160,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.857142857142857,
+          2.857142857142857
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -3.0365584651472917,
+          3.0365584651472917
+        ],
+        "theta_dot": [
+          -3.2708580945703023,
+          3.2708580945703023
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.7_p2_kap0.9",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.7,
+        "phi_max_deg": 34.99202019855866,
+        "p": 2.0,
+        "W": 2.857142857142857
+      },
+      "forces": {
+        "F_max": 3.3957,
+        "F_E": 3.773,
+        "F_krit": 7.546,
+        "kappa": 0.9,
+        "k": 0.45,
+        "u": 0.315
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 3.63,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 3.63,
+          "reversals": 1
+        },
+        "t_pump": 3.63,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.7674667469217937,
+            0.7335011634921186
+          ],
+          "theta_dot": [
+            -1.3967461113238784,
+            1.408205007373816
+          ],
+          "episodes": 100,
+          "steps": 3773,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.2066565127217315,
+            1.2396886673435095
+          ],
+          "theta_dot": [
+            -1.88557004912631,
+            1.8558698360452117
+          ],
+          "episodes": 100,
+          "steps": 1700,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.69718165436605,
+            5.69718165436605
+          ],
+          "r": [
+            -1.3938730308476834,
+            1.3938730308476834
+          ],
+          "episodes": 2,
+          "steps": 364,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.857142857142857,
+          2.857142857142857
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -7.121477067957562,
+          7.121477067957562
+        ],
+        "theta_dot": [
+          -4.099303849967492,
+          4.099303849967492
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.7_p2_kap0.7",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.7,
+        "phi_max_deg": 34.99202019855866,
+        "p": 2.0,
+        "W": 2.857142857142857
+      },
+      "forces": {
+        "F_max": 2.6411,
+        "F_E": 3.773,
+        "F_krit": 7.546,
+        "kappa": 0.7,
+        "k": 0.35,
+        "u": 0.24499999999999994
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 3.7,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 3.7,
+          "reversals": 1
+        },
+        "t_pump": 3.7,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.5769554317072318,
+            0.6318541141852584
+          ],
+          "theta_dot": [
+            -1.350798778788632,
+            1.3083664966450723
+          ],
+          "episodes": 100,
+          "steps": 3812,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -1.1070160574257797,
+            1.0586997084637328
+          ],
+          "theta_dot": [
+            -1.7432046708718352,
+            1.7302234063914461
+          ],
+          "episodes": 100,
+          "steps": 1918,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.539684145629477,
+            4.539684145629477
+          ],
+          "r": [
+            -1.1122132929279724,
+            1.1122132929279724
+          ],
+          "episodes": 2,
+          "steps": 370,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.857142857142857,
+          2.857142857142857
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.674605182036846,
+          5.674605182036846
+        ],
+        "theta_dot": [
+          -3.5692724547497594,
+          3.5692724547497594
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.7_p2_kap0.5",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.7,
+        "phi_max_deg": 34.99202019855866,
+        "p": 2.0,
+        "W": 2.857142857142857
+      },
+      "forces": {
+        "F_max": 1.8865,
+        "F_E": 3.773,
+        "F_krit": 7.546,
+        "kappa": 0.5,
+        "k": 0.25,
+        "u": 0.175
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 4.1899999999999995,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 4.1899999999999995,
+          "reversals": 1
+        },
+        "t_pump": 4.1899999999999995,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3932712068425506,
+            0.31387833169918533
+          ],
+          "theta_dot": [
+            -1.142005145462447,
+            1.2154687795026944
+          ],
+          "episodes": 100,
+          "steps": 3913,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.904499955669752,
+            0.9050531984078936
+          ],
+          "theta_dot": [
+            -1.5445683600792284,
+            1.5720701453944481
+          ],
+          "episodes": 100,
+          "steps": 2157,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.361365620839781,
+            3.361365620839781
+          ],
+          "r": [
+            -0.8232810295721803,
+            0.8232810295721803
+          ],
+          "episodes": 2,
+          "steps": 420,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.857142857142857,
+          2.857142857142857
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.201707026049727,
+          4.201707026049727
+        ],
+        "theta_dot": [
+          -2.9941889687082854,
+          2.9941889687082854
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.7_p2_kap0.3",
+      "series": [
+        "S2_slope"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.7,
+        "phi_max_deg": 34.99202019855866,
+        "p": 2.0,
+        "W": 2.857142857142857
+      },
+      "forces": {
+        "F_max": 1.1319,
+        "F_E": 3.773,
+        "F_krit": 7.546,
+        "kappa": 0.3,
+        "k": 0.15,
+        "u": 0.10499999999999998
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 8.18,
+          "reversals": 3
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 8.18,
+          "reversals": 3
+        },
+        "t_pump": 8.18,
+        "reversals": 3
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2865165282113469,
+            0.312833640893093
+          ],
+          "theta_dot": [
+            -1.1375864005172793,
+            1.1666698722711997
+          ],
+          "episodes": 100,
+          "steps": 4368,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6800922991464259,
+            0.7239829390890088
+          ],
+          "theta_dot": [
+            -1.3873177796954188,
+            1.3730331688389954
+          ],
+          "episodes": 100,
+          "steps": 2743,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.724521609615158,
+            4.724521609615158
+          ],
+          "r": [
+            -1.156018130393296,
+            1.156018130393296
+          ],
+          "episodes": 2,
+          "steps": 818,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -2.857142857142857,
+          2.857142857142857
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.9056520120189475,
+          5.9056520120189475
+        ],
+        "theta_dot": [
+          -3.179169887610893,
+          3.179169887610893
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p3_kap1.2",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 3.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 2.156,
+        "F_E": 1.7966666666666669,
+        "F_krit": 5.390000000000001,
+        "kappa": 1.2,
+        "k": 0.39999999999999997,
+        "u": 0.19999999999999998
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 2.885,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 2.885,
+          "reversals": 0
+        },
+        "t_pump": 2.885,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.6006675247287377,
+            0.5129907148771956
+          ],
+          "theta_dot": [
+            -1.22373128011865,
+            1.3261809571817296
+          ],
+          "episodes": 100,
+          "steps": 3839,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.9673773399859094,
+            1.0204691721305987
+          ],
+          "theta_dot": [
+            -1.707672397012432,
+            1.7014241676756903
+          ],
+          "episodes": 100,
+          "steps": 1947,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.249981875764744,
+            3.249981875764744
+          ],
+          "r": [
+            -0.3834791619529296,
+            0.3834791619529296
+          ],
+          "episodes": 2,
+          "steps": 290,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.06247734470593,
+          4.06247734470593
+        ],
+        "theta_dot": [
+          -2.613939448706702,
+          2.613939448706702
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p3_kap0.9",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 3.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 1.6170000000000002,
+        "F_E": 1.7966666666666669,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.9,
+        "k": 0.3,
+        "u": 0.15
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 6.38,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 6.38,
+          "reversals": 1
+        },
+        "t_pump": 6.38,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3919917339599096,
+            0.4553263681109157
+          ],
+          "theta_dot": [
+            -1.1764389659084404,
+            1.3285817641841926
+          ],
+          "episodes": 100,
+          "steps": 4278,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8839383726465337,
+            0.8787803970705336
+          ],
+          "theta_dot": [
+            -1.5216564523614948,
+            1.5544426899659136
+          ],
+          "episodes": 100,
+          "steps": 2159,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -6.61618483620072,
+            6.61618483620072
+          ],
+          "r": [
+            -0.7082239954970209,
+            0.7082239954970209
+          ],
+          "episodes": 2,
+          "steps": 638,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -8.270231045250899,
+          8.270231045250899
+        ],
+        "theta_dot": [
+          -2.8283333568286686,
+          2.8283333568286686
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p3_kap0.7",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 3.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 1.2576666666666667,
+        "F_E": 1.7966666666666669,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.7,
+        "k": 0.2333333333333333,
+        "u": 0.11666666666666665
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 6.895,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 6.895,
+          "reversals": 1
+        },
+        "t_pump": 6.895,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2791167669030637,
+            0.34257165497740216
+          ],
+          "theta_dot": [
+            -1.1883805733145971,
+            1.1374948832613623
+          ],
+          "episodes": 100,
+          "steps": 4546,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.7784931348963839,
+            0.8051152279361191
+          ],
+          "theta_dot": [
+            -1.45817503403603,
+            1.4389738765152096
+          ],
+          "episodes": 100,
+          "steps": 2442,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.5280140522561005,
+            5.5280140522561005
+          ],
+          "r": [
+            -0.5576402297600628,
+            0.5576402297600628
+          ],
+          "episodes": 2,
+          "steps": 690,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -6.910017565320126,
+          6.910017565320126
+        ],
+        "theta_dot": [
+          -2.519769079745116,
+          2.519769079745116
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p3_kap0.5",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 3.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 0.8983333333333334,
+        "F_E": 1.7966666666666669,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.5,
+        "k": 0.16666666666666666,
+        "u": 0.08333333333333333
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 7.825,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 7.825,
+          "reversals": 1
+        },
+        "t_pump": 7.825,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.2557347062776355,
+            0.2997269764001563
+          ],
+          "theta_dot": [
+            -1.1211153242681546,
+            1.1274377581634123
+          ],
+          "episodes": 100,
+          "steps": 4113,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.7134636708579111,
+            0.7236379589357023
+          ],
+          "theta_dot": [
+            -1.3327688690985886,
+            1.3486114655021277
+          ],
+          "episodes": 100,
+          "steps": 2841,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.108910908005349,
+            4.108910908005349
+          ],
+          "r": [
+            -0.4354125017393731,
+            0.4354125017393731
+          ],
+          "episodes": 2,
+          "steps": 784,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.136138635006686,
+          5.136138635006686
+        ],
+        "theta_dot": [
+          -2.230029959051876,
+          2.230029959051876
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p3_kap0.3",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 3.0,
+        "W": 6.0
+      },
+      "forces": {
+        "F_max": 0.539,
+        "F_E": 1.7966666666666669,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.3,
+        "k": 0.09999999999999999,
+        "u": 0.049999999999999996
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 12.985000000000001,
+          "reversals": 2
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 12.985000000000001,
+          "reversals": 2
+        },
+        "t_pump": 12.985000000000001,
+        "reversals": 2
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.1938387033002775,
+            0.18088036710358957
+          ],
+          "theta_dot": [
+            -1.0504022392698236,
+            1.0958228219996993
+          ],
+          "episodes": 100,
+          "steps": 4060,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6374178966213958,
+            1.0786385555643208
+          ],
+          "theta_dot": [
+            -1.2250102450415337,
+            1.226307436410554
+          ],
+          "episodes": 100,
+          "steps": 3419,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.406361761165775,
+            4.406361761165775
+          ],
+          "r": [
+            -0.3832494273159795,
+            0.3832494273159795
+          ],
+          "episodes": 2,
+          "steps": 1300,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -6.0,
+          6.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.507952201457219,
+          5.507952201457219
+        ],
+        "theta_dot": [
+          -2.0119460796581667,
+          2.0119460796581667
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p4_kap1.2",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 4.0,
+        "W": 8.0
+      },
+      "forces": {
+        "F_max": 1.6170000000000002,
+        "F_E": 1.3475000000000001,
+        "F_krit": 5.390000000000001,
+        "kappa": 1.2,
+        "k": 0.3,
+        "u": 0.15
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 3.6950000000000003,
+          "reversals": 0
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 3.6950000000000003,
+          "reversals": 0
+        },
+        "t_pump": 3.6950000000000003,
+        "reversals": 0
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3703595625517887,
+            0.45587239711211014
+          ],
+          "theta_dot": [
+            -1.2614227603001897,
+            1.2004135601453616
+          ],
+          "episodes": 100,
+          "steps": 4334,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8749682347758447,
+            0.8799088361591352
+          ],
+          "theta_dot": [
+            -1.5714827985810946,
+            1.545293893068911
+          ],
+          "episodes": 100,
+          "steps": 2190,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -3.742230234003883,
+            3.742230234003883
+          ],
+          "r": [
+            -0.36034664021215795,
+            0.36034664021215795
+          ],
+          "episodes": 2,
+          "steps": 370,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -8.0,
+          8.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -4.677787792504854,
+          4.677787792504854
+        ],
+        "theta_dot": [
+          -2.4147867984915656,
+          2.4147867984915656
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p4_kap0.9",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 4.0,
+        "W": 8.0
+      },
+      "forces": {
+        "F_max": 1.2127500000000002,
+        "F_E": 1.3475000000000001,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.9,
+        "k": 0.225,
+        "u": 0.1125
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 7.995,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 7.995,
+          "reversals": 1
+        },
+        "t_pump": 7.995,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.3222975459298902,
+            0.4773311037750757
+          ],
+          "theta_dot": [
+            -1.1779829913868298,
+            1.128803335389937
+          ],
+          "episodes": 100,
+          "steps": 4350,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8235959865669787,
+            0.7843848884660107
+          ],
+          "theta_dot": [
+            -1.453853743249231,
+            1.428923872197982
+          ],
+          "episodes": 100,
+          "steps": 2436,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -6.504122340885066,
+            6.504122340885066
+          ],
+          "r": [
+            -0.8186307691291854,
+            0.8186307691291854
+          ],
+          "episodes": 2,
+          "steps": 800,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -8.0,
+          8.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -8.130152926106332,
+          8.130152926106332
+        ],
+        "theta_dot": [
+          -2.8406056404730204,
+          2.8406056404730204
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p4_kap0.7",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 4.0,
+        "W": 8.0
+      },
+      "forces": {
+        "F_max": 0.94325,
+        "F_E": 1.3475000000000001,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.7,
+        "k": 0.175,
+        "u": 0.0875
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 8.85,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 8.85,
+          "reversals": 1
+        },
+        "t_pump": 8.85,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.26187371163323847,
+            0.2872343188605219
+          ],
+          "theta_dot": [
+            -1.1278873119025152,
+            1.1053236364700258
+          ],
+          "episodes": 100,
+          "steps": 4218,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.6858957998214869,
+            0.7611968635709968
+          ],
+          "theta_dot": [
+            -1.3491034377103006,
+            1.3566950286980872
+          ],
+          "episodes": 100,
+          "steps": 2775,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -5.522106388880522,
+            5.522106388880522
+          ],
+          "r": [
+            -0.6480169785767174,
+            0.6480169785767174
+          ],
+          "episodes": 2,
+          "steps": 886,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -8.0,
+          8.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -6.902632986100653,
+          6.902632986100653
+        ],
+        "theta_dot": [
+          -2.5058900090935055,
+          2.5058900090935055
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p4_kap0.5",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 4.0,
+        "W": 8.0
+      },
+      "forces": {
+        "F_max": 0.6737500000000001,
+        "F_E": 1.3475000000000001,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.5,
+        "k": 0.125,
+        "u": 0.0625
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "fail_left",
+          "t": 10.13,
+          "reversals": 1
+        },
+        "first_left": {
+          "outcome": "success",
+          "t": 10.13,
+          "reversals": 1
+        },
+        "t_pump": 10.13,
+        "reversals": 1
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.1714621620544428,
+            0.21302930232370013
+          ],
+          "theta_dot": [
+            -1.0575320585373666,
+            1.0917869542932899
+          ],
+          "episodes": 100,
+          "steps": 4107,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.8341216723493964,
+            0.8117249594495723
+          ],
+          "theta_dot": [
+            -1.269123871097631,
+            1.2697298599730156
+          ],
+          "episodes": 100,
+          "steps": 3315,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.479855056519378,
+            4.479855056519378
+          ],
+          "r": [
+            -0.4309150497876289,
+            0.4309150497876289
+          ],
+          "episodes": 2,
+          "steps": 1014,
+          "outcomes": {
+            "fail_left": 1,
+            "success": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -8.0,
+          8.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.599818820649222,
+          5.599818820649222
+        ],
+        "theta_dot": [
+          -2.1258061372008057,
+          2.1258061372008057
+        ],
+        "margin": 0.25
+      }
+    },
+    {
+      "id": "H1_tan0.5_p4_kap0.3",
+      "series": [
+        "S3_shape"
+      ],
+      "valley": {
+        "type": "PowerValley",
+        "H": 1.0,
+        "tan_phi_max": 0.5,
+        "phi_max_deg": 26.56505117707799,
+        "p": 4.0,
+        "W": 8.0
+      },
+      "forces": {
+        "F_max": 0.40425000000000005,
+        "F_E": 1.3475000000000001,
+        "F_krit": 5.390000000000001,
+        "kappa": 0.3,
+        "k": 0.075,
+        "u": 0.0375
+      },
+      "pumping_reference_no_pole": {
+        "first_right": {
+          "outcome": "success",
+          "t": 16.91,
+          "reversals": 2
+        },
+        "first_left": {
+          "outcome": "fail_left",
+          "t": 16.91,
+          "reversals": 2
+        },
+        "t_pump": 16.91,
+        "reversals": 2
+      },
+      "state_ranges": {
+        "random": {
+          "x_dot": [
+            -0.14327150009301629,
+            0.15573217431096795
+          ],
+          "theta_dot": [
+            -1.0461934232499333,
+            1.0446070286375257
+          ],
+          "episodes": 100,
+          "steps": 4212,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_pole": {
+          "x_dot": [
+            -0.5975677573107497,
+            0.7438699768932515
+          ],
+          "theta_dot": [
+            -1.1783086495852408,
+            1.1786945984496966
+          ],
+          "episodes": 100,
+          "steps": 3933,
+          "outcomes": {
+            "fail_pole": 100
+          }
+        },
+        "pumping_nopole": {
+          "x_dot": [
+            -4.6138635191992865,
+            4.6138635191992865
+          ],
+          "r": [
+            -0.4399198851973654,
+            0.4399198851973654
+          ],
+          "episodes": 2,
+          "steps": 1692,
+          "outcomes": {
+            "success": 1,
+            "fail_left": 1
+          }
+        }
+      },
+      "tile_bounds": {
+        "x": [
+          -8.0,
+          8.0
+        ],
+        "theta": [
+          -0.2617993877991494,
+          0.2617993877991494
+        ],
+        "x_dot": [
+          -5.767329398999108,
+          5.767329398999108
+        ],
+        "theta_dot": [
+          -2.023268104558827,
+          2.023268104558827
+        ],
+        "margin": 0.25
+      }
+    }
+  ],
+  "recalibration": {
+    "script": "scripts/recalibrate_phase_a.py",
+    "razlog": "kriterij 5 (delez korakov zunaj meja < 0.01) je bil krsen pri navedenih konfiguracijah",
+    "izhodisce": {
+      "plan": "plan_v2.json",
+      "oznaka": "phase-a-v1"
+    },
+    "pravilo": "nova meja = max(stara, izmerjeni |max| * (1 + rezerva)); samo sirjenje; x in theta fiksna",
+    "merjenje": "pozresno na 81 vrednotitvenih stanjih + epsilon = 0.05 iz nakljucnih ucnih zacetnih stanj; priblizek ucne porazdelitve, ne njena rekonstrukcija",
+    "rezerva": 0.25,
+    "git": {
+      "commit": "b237bfde4c06336a8a3f676254d337df9a22e13f",
+      "short": "b237bfde",
+      "branch": "main",
+      "dirty": true,
+      "describe": "phase-a-v1"
+    },
+    "konfiguracije": {
+      "H1_tan0.5_p2_kap1.2": {
+        "changed": {
+          "x_dot": {
+            "stara": 3.27049653028329,
+            "nova": 7.1796745737457135,
+            "izmerjeni_absmax": 5.743739658996571,
+            "rezerva": 0.25
+          }
+        },
+        "measured": {
+          "x": [
+            -4.018220743572157,
+            4.020073959461019
+          ],
+          "x_dot": [
+            -5.376314242845313,
+            5.743739658996571
+          ],
+          "theta": [
+            -0.26807887317542434,
+            0.26633072072366987
+          ],
+          "theta_dot": [
+            -1.7367010229582531,
+            1.3446336315470595
+          ]
+        },
+        "episodes": {
+          "greedy": 1620,
+          "exploring": 4000,
+          "epsilon": 0.05
+        },
+        "runs": [
+          "20260928-163804_phaseA_H1_tan0.5_p2_kap1.2_s0_b237bfde",
+          "20260928-164241_phaseA_H1_tan0.5_p2_kap1.2_s1_b237bfde",
+          "20260928-164717_phaseA_H1_tan0.5_p2_kap1.2_s2_b237bfde",
+          "20260928-165156_phaseA_H1_tan0.5_p2_kap1.2_s3_b237bfde",
+          "20260928-165643_phaseA_H1_tan0.5_p2_kap1.2_s4_b237bfde",
+          "20260928-170151_phaseA_H1_tan0.5_p2_kap1.2_s5_b237bfde",
+          "20260928-170624_phaseA_H1_tan0.5_p2_kap1.2_s6_b237bfde",
+          "20260928-171101_phaseA_H1_tan0.5_p2_kap1.2_s7_b237bfde",
+          "20260928-171535_phaseA_H1_tan0.5_p2_kap1.2_s8_b237bfde",
+          "20260928-172010_phaseA_H1_tan0.5_p2_kap1.2_s9_b237bfde",
+          "20261002-152500_phaseA_H1_tan0.5_p2_kap1.2_s0_b237bfde",
+          "20261002-153101_phaseA_H1_tan0.5_p2_kap1.2_s1_b237bfde",
+          "20261002-153629_phaseA_H1_tan0.5_p2_kap1.2_s2_b237bfde",
+          "20261002-154155_phaseA_H1_tan0.5_p2_kap1.2_s3_b237bfde",
+          "20261002-154723_phaseA_H1_tan0.5_p2_kap1.2_s4_b237bfde",
+          "20261002-155251_phaseA_H1_tan0.5_p2_kap1.2_s5_b237bfde",
+          "20261002-155818_phaseA_H1_tan0.5_p2_kap1.2_s6_b237bfde",
+          "20261002-160346_phaseA_H1_tan0.5_p2_kap1.2_s7_b237bfde",
+          "20261002-160910_phaseA_H1_tan0.5_p2_kap1.2_s8_b237bfde",
+          "20261002-161436_phaseA_H1_tan0.5_p2_kap1.2_s9_b237bfde"
+        ]
+      }
+    }
+  }
+}
