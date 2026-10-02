@@ -201,13 +201,19 @@ def main():
     }
     out_path.write_text(json.dumps(plan, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     print(f"\nzapisano: {out_path}   (verzija {plan['version']})")
-    print("zamrznjeni plan_v2.json NI spremenjen.")
-    print("\nnaslednji korak - ponovi prizadete zagone proti novemu nacrtu:")
+    print(f"zamrznjeni {plan_path.name} NI spremenjen.")
     ids = " ".join(r["config_id"] for r in results)
-    print(f"  python scripts/run_phase_a.py --plan {out_path.as_posix()} --configs {ids} "
+    rel = out_path.relative_to(ROOT).as_posix() if out_path.is_relative_to(ROOT) else out_path.as_posix()
+    print("\nnaslednji koraki PO TEM VRSTNEM REDU:")
+    print("  1) commit PRED zagonom - sicer zagon zavrne umazan repozitorij,")
+    print("     ker se v vsak rezultat zapise git hash kode, ki ga je ustvarila:")
+    print(f"       git add -A && git commit -m \"Rekalibracija meja po fazi A ({plan['version']})\"")
+    print("  2) ponovi prizadete zagone proti novemu nacrtu:")
+    print(f"       python scripts/run_phase_a.py --plan {rel} --configs {ids} "
           f"--no-resume --csv runs/phase_a_v2_summary.csv")
-    print("  git add -A && git commit -m \"Rekalibracija meja po fazi A (plan_v3)\"")
-    print("  git tag phase-a-v2 -m \"Faza A: ponovitev s popravljenimi mejami\"")
+    print("  3) oznaci zamrznjeno stanje in potisni:")
+    print("       git tag phase-a-v2 -m \"Faza A: ponovitev s popravljenimi mejami\"")
+    print("       git push && git push origin phase-a-v2")
 
 
 if __name__ == "__main__":
