@@ -155,6 +155,11 @@ def main():
     out = Path(args.out)
     fig.savefig(out, dpi=args.dpi, facecolor=SURFACE)
     print("shranjeno:", out)
+    # predloga diplome zahteva vektorske slike za grafe; PDF zapisemo vedno zraven
+    if out.suffix.lower() != ".pdf":
+        pdf = out.with_suffix(".pdf")
+        fig.savefig(pdf, facecolor=SURFACE)
+        print("shranjeno:", pdf, " (za diplomo uporabi tega)")
 
 
 if __name__ == "__main__":
